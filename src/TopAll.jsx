@@ -122,11 +122,25 @@ function TopAll() {
               謝謝您的主動聯絡，請留下要諮詢的問題，我們會用以下資訊進行回覆。
             </p>
             <form onSubmit={handleSubmit}>
+              {user ? (
               <div className="mb-4">
                 <label className="block  mb-2 mt-4" htmlFor="name">
                   您的電郵：user01@gmail.com
                 </label>
-              </div>
+              </div>) : (
+              <div className="mb-4">
+              <label className="block  mb-2 mt-4" htmlFor="name">
+                您的聯絡方式：
+              </label>
+              <input
+                    className="w-full px-2 pt-2 border border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent transition duration-150 ease-in-out"
+                    type="email"
+                    id="email"
+                    placeholder="請輸入您的聯絡方式（如：信箱）"
+                    required
+                  />
+                </div>
+              )}
 
               <div className="mb-4">
                 <textarea
