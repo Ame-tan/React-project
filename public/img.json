@@ -1,0 +1,254 @@
+{
+  "Images": [
+    {
+      "category": "上衣",
+      "id": 3,
+      "image": "/images/photo3.jpg",
+      "description": "法式甜美娃娃領明線刺繡襯衫",
+      "money": "NT$550"
+    },
+    {
+      "category": "上衣",
+      "id": 4,
+      "image": "/images/photo4.jpg",
+      "description": "渲染印花ins短袖襯衫",
+      "money": "NT$520"
+    },
+    {
+      "category": "裙子",
+      "id": 5,
+      "image": "/images/photo5.jpg",
+      "description": "森系超薄牛仔A字大擺中長裙",
+      "money": "NT$650",
+      "popular":"true"
+    },
+    {
+      "category": "上衣",
+      "id": 6,
+      "image": "/images/photo6.jpg",
+      "description": "日系藍泡泡褶皺短袖衫",
+      "money": "NT$550"
+    },
+    {
+      "category": "褲子",
+      "id": 7,
+      "image": "/images/photo7.jpg",
+      "description": "小清新女孩刺繡吊帶牛仔連身短褲",
+      "money": "NT$650",
+      "popular":"true"
+    },
+    {
+      "category": "褲子",
+      "id": 8,
+      "image": "/images/photo8.jpg",
+      "description": "淺藍高腰麻花條設計牛仔短褲",
+      "money": "NT$520"
+    },
+    {
+      "category": "洋裝",
+      "id": 9,
+      "image": "/images/photo9.jpg",
+      "description": "夏季白色V領吊帶收腰荷葉邊小洋裝",
+      "money": "NT$690"
+    },
+    {
+      "category": "外套",
+      "id": 10,
+      "image": "/images/photo10.jpg",
+      "description": "蕾絲圍邊娃娃大翻領牛仔外套",
+      "money": "NT$690"
+    },
+    {
+      "category": "裙子",
+      "id": 11,
+      "image": "/images/photo11.jpg",
+      "description": "文藝高腰白色蕾絲邊中長裙",
+      "money": "NT$650"
+    },
+    {
+      "category": "外套",
+      "id": 12,
+      "image": "/images/photo12.jpg",
+      "description": "純色短版小西裝外套*兩色",
+      "money": "NT$990"
+    },
+    {
+      "category": "上衣",
+      "id": 13,
+      "image": "/images/photo13.jpg",
+      "description": "法式氣質寬鬆拼接荷葉露鎖骨上衣",
+      "money": "NT$560",
+      "popular":"true"
+    },
+    {
+      "category": "上衣",
+      "id": 14,
+      "image": "/images/photo14.jpg",
+      "description": "夏季文藝蝴蝶結綁帶設計立領衫",
+      "money": "NT$590"
+    },
+    {
+      "category": "上衣",
+      "id": 15,
+      "image": "/images/photo15.jpg",
+      "description": "文藝白色圓娃娃領壓摺襯衫",
+      "money": "NT$590"
+    },
+    {
+      "category": "褲子",
+      "id": 16,
+      "image": "/images/photo16.jpg",
+      "description": "休閒百搭棉麻黑色短褲",
+      "money": "NT$580"
+    },
+    {
+      "category": "褲子",
+      "id": 17,
+      "image": "/images/photo17.jpg",
+      "description": "小復古休閒雙口袋百搭牛仔長褲",
+      "money": "NT$650",
+      "popular":"true"
+    },
+    {
+      "category": "褲子",
+      "id": 18,
+      "image": "/images/photo18.jpg",
+      "description": "春夏寬鬆鬆緊蕾絲拼接九分牛仔褲",
+      "money": "NT$650"
+    },
+    {
+      "category": "洋裝",
+      "id": 19,
+      "image": "/images/photo19.jpg",
+      "description": "氣質女孩提花無袖連身洋裝",
+      "money": "NT$750",
+      "popular":"true"
+    },
+    {
+      "category": "上衣",
+      "id": 20,
+      "image": "/images/photo20.jpg",
+      "description": "夏季氣質花邊格紋短袖衫+高腰中長裙<<兩件套>>",
+      "money": "NT$790"
+    },
+    {
+      "category": "外套",
+      "id": 21,
+      "image": "/images/photo21.jpg",
+      "description": "水藍披肩小外套",
+      "money": "NT$450",
+      "popular":"true"
+    },
+    {
+      "category": "外套",
+      "id": 22,
+      "image": "/images/photo22.jpg",
+      "description": "初秋口袋翻領扣子夾克外套",
+      "money": "NT$880"
+    },
+    {
+      "category":"飾品",
+      "id": 23,
+      "image": "/images/photo23.jpg",
+      "description": "極簡軌跡。極細銀戒任選兩件88折福袋",
+      "money": "NT$1,197~1,725",
+      "type":"ring"
+    },
+    {
+      "category":"飾品",
+      "id": 24,
+      "image": "/images/photo24.jpg",
+      "description": "極簡軌跡。極細波紋戒 WAVED ULTRA THIN RING",
+      "money": "NT$680",
+      "type":"ring"
+    },
+    {
+      "category":"飾品",
+      "id": 25,
+      "image": "/images/photo25.jpg",
+      "description": "[現貨＋預購] 小花園。花苞戒 LITTLE GARDEN RING",
+      "money": "NT$1,280",
+      "type":"ring"
+    },
+    {
+      "category":"飾品",
+      "id": 26,
+      "image": "/images/photo26.jpg",
+      "description": "極簡軌跡。極細雙圈戒 ULTRA THIN DOUBLE RING",
+      "money": "NT$980",
+      "type":"ring"
+    },
+    {
+      "category":"飾品",
+      "id": 27,
+      "image": "/images/photo27.jpg",
+      "description": "小公主的紅蘋果 | 磁吸式耳環【現貨+預購】",
+      "money": "NT$180",
+      "type":"earring"
+    },
+    {
+      "category":"飾品",
+      "id": 28,
+      "image": "/images/photo28.jpg",
+      "description": "兩朵小雛菊 | 耳針/夾式耳環【現貨】",
+      "money": "NT$190",
+      "type":"earring"
+    },
+    {
+      "category":"飾品",
+      "id": 29,
+      "image": "/images/photo29.jpg",
+      "description": "春意。粉晶半圈耳環 ROSE QUARTZ CRYSTAL EARRING",
+      "money": "NT$1,580",
+      "type":"earring"
+    },
+    {
+      "category":"飾品",
+      "id": 30,
+      "image": "/images/photo30.jpg",
+      "description": "石紋。白松石片垂墜耳環 WHITE HOWLITE SILVER EARRING 03",
+      "money": "NT$980",
+      "type":"earring"
+    },
+    {
+      "category":"飾品",
+      "id": 31,
+      "image": "/images/photo31.jpg",
+      "description": "春意。粉晶垂墜耳環 ROSE QUARTZ CRYSTAL DANGLE EARRING",
+      "money": "NT$1,380",
+      "type":"earring"
+    },
+    {
+      "category":"飾品",
+      "id": 32,
+      "image": "/images/photo32.jpg",
+      "description": "春意。珍珠圈鎖骨鏈 PEARL CIRCLE NECKLACE",
+      "money": "NT$1,080",
+      "type":"necklace"
+    },
+    {
+      "category":"飾品",
+      "id": 33,
+      "image": "/images/photo33.jpg",
+      "description": "春意。珍珠簡約鎖骨鏈 PEARL BASIC NECKLACE",
+      "money": "NT$1,380",
+      "type":"necklace"
+    },
+    {
+      "category":"飾品",
+      "id": 34,
+      "image": "/images/photo34.jpg",
+      "description": "春意。粉晶鎖骨鏈 ROSE QUARTZ CRYSTAL NECKLACE",
+      "money": "NT$1,280",
+      "type":"necklace"
+    },
+    {
+      "category":"飾品",
+      "id": 35,
+      "image": "/images/photo35.jpg",
+      "description": "[現貨＋預購] 石紋。白松石片鎖骨鏈 WHITE HOWLITE SILVER NECKLACE 01",
+      "money": "NT$980",
+      "type":"necklace"
+    }
+  ]
+}
