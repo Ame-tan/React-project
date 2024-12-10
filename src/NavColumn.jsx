@@ -1,98 +1,159 @@
+import React, { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-
+import { Link } from "react-router-dom";
 
 function NavColumn() {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="TOP-2  flex  items-center  justify-center  space-x-20  divide-x  divide-gray-300">
+    <div className="top-container ">
+      
+    <div
+      className="navcolumn-container  "
+    >
+      
+      <nav className="bg-red w-full border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+        {/* 三條線圖示 */}
+        
+        <div className="flex justify-start items-start px-2 sm:px-2 py-3  md:hidden">
+          
+          <button
+            className="text-gray-800 focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <div className="space-y-1">
+              <span className="block w-6 h-0.5 bg-gray-800"></span>
+              <span className="block w-6 h-0.5 bg-gray-800"></span>
+              <span className="block w-6 h-0.5 bg-gray-800"></span>
+            </div>
+          </button>
+        </div>
 
-      <div className="Infor   relative group ">
-        <a href="Information">
-        <button className="text-xl  text-gray-800  p-2  flex  items-center   shadow-gray-950  space-x-1">
-          <span>資訊</span>
-          <ChevronDownIcon className="w-5 h-5 text-gray-800" />
-        </button></a>
+        {/* 導覽列 */}
         <div
-          className="absolute bg-white border border-gray-300 rounded-md  w-48 z-10  opacity-0  group-hover:opacity-100  duration-300  pointer-events-none group-hover:pointer-events-auto  "
+          className={`md:flex md:justify-center md:items-center ${
+            isOpen ? "block" : "hidden"
+          }`}
         >
-          <a href="ProductInformation" className="block  px-4  py-2  text-gray-800   hover:bg-gray-100 ">
-            商品資訊
-          </a>
-          <a href="PayAndTo" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            付款&配送說明
-          </a>
-          <a href="Question" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            常見問題
-          </a>
+          <div className="md:flex md:space-x-10 w-auto grid grid-cols-5 gap-x-4 gap-y-4 mt-4 md:mt-0">
+            {/* 資訊 */}
+            <div className="relative group ">
+              <Link to="/Information">
+                <button className="text-xl  text-gray-800 p-2 flex items-center">
+                  <span>資訊</span>
+                  <ChevronDownIcon className="w-5 h-5 text-gray-800" />
+                </button>
+              </Link>
+              <div className="absolute bg-white border border-gray-300 rounded-md w-48 z-10 opacity-0 group-hover:opacity-100 duration-300 pointer-events-none group-hover:pointer-events-auto">
+                <Link
+                  to="/ProductInformation"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  商品資訊
+                </Link>
+                <Link
+                  to="/PayAndTo"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  付款&配送說明
+                </Link>
+                <Link
+                  to="/Question"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  常見問題
+                </Link>
+              </div>
+            </div>
+
+            {/* 熱銷商品 */}
+            <div>
+              <Link to="/HotThing">
+                <button className="text-xl text-gray-800 p-2">熱銷商品</button>
+              </Link>
+            </div>
+
+            {/* 所有商品 */}
+            <div className="relative group">
+              <Link to="/AllProducts">
+                <button className="text-xl text-gray-800 p-2 flex items-center space-x-1">
+                  <span>所有商品</span>
+                  <ChevronDownIcon className="w-5 h-5 text-gray-800" />
+                </button>
+              </Link>
+              <div className="absolute bg-white border border-gray-300 rounded-md w-48 z-10 opacity-0 group-hover:opacity-100 duration-300 pointer-events-none group-hover:pointer-events-auto">
+                <Link
+                  to="/Clothes"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  上衣
+                </Link>
+                <Link
+                  to="/Pants"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  褲子
+                </Link>
+                <Link
+                  to="/Skirt"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  裙子
+                </Link>
+                <Link
+                  to="/Dress"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  洋裝
+                </Link>
+                <Link
+                  to="/Coat"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  外套
+                </Link>
+              </div>
+            </div>
+
+            {/* 飾品 */}
+            <div className="relative group">
+              <Link to="/Accessories">
+                <button className="text-xl text-gray-800 p-2 flex items-center space-x-1">
+                  <span>飾品</span>
+                  <ChevronDownIcon className="w-5 h-5 text-gray-800" />
+                </button>
+              </Link>
+              <div className="absolute bg-white border border-gray-300 rounded-md w-48 z-10 opacity-0 group-hover:opacity-100 duration-300 pointer-events-none group-hover:pointer-events-auto">
+                <Link
+                  to="/Earring"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  耳環
+                </Link>
+                <Link
+                  to="/Necklace"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  項鍊
+                </Link>
+                <Link
+                  to="/Ring"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  戒指
+                </Link>
+              </div>
+            </div>
+
+            {/* 隱私政策 */}
+            <div>
+              <Link to="/Privacy">
+                <button className="text-xl text-gray-800 p-2">隱私政策</button>
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
-{/*relative group = 讓absolute絕對定位定最近的相對定位relative(下拉式選單) group對子元素做特定樣式變化 如+hover */}
-
-        <div className="Hot">
-          <a href="HotThing">
-          <button className="text-xl  text-gray-800  p-2  flex  items-center  shadow-gray-950  space-x-1">
-            <span>熱銷商品</span>
-          </button></a>
-        </div>
-
-
-      <div className="Allshop   relative group">
-        <a href="AllProducts">
-        <button className="text-xl  text-gray-800  p-2  flex  items-center  shadow-gray-950  space-x-1">
-          <span>所有商品</span>
-          <ChevronDownIcon className="w-5  h-5  text-gray-800" />
-        </button></a>
-        <div
-          className="absolute  bg-white border  border-gray-300  rounded-md    w-48  z-10   opacity-0  group-hover:opacity-100  duration-300  pointer-events-none group-hover:pointer-events-auto"
-        >
-          <a href="Clothes" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            上衣
-          </a>
-          <a href="Pants" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            褲子
-          </a>
-          <a href="Skirt" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            裙子
-          </a>
-          <a href="Dress" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            洋裝
-          </a>
-          <a href="Coat" className="block  px-4 py-2  text-gray-800   hover:bg-gray-100">
-            外套
-          </a>
-        </div>
-      </div>
-
-
-      <div className="Acsr   relative group">
-        <a href="Accessories">
-        <button className="text-xl  text-gray-800  p-2  flex items-center  shadow-gray-950  space-x-1">
-          <span>飾品</span>
-          <ChevronDownIcon className="w-5  h-5  text-gray-800" />
-        </button></a>
-        <div
-          className="absolute  bg-white  border  border-gray-300  rounded-md  w-48  z-10  opacity-0  group-hover:opacity-100  duration-300  pointer-events-none group-hover:pointer-events-auto"
-        >
-          <a href="Earring" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            耳環
-          </a>
-          <a href="Necklace" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            項鍊
-          </a>
-          <a href="Ring" className="block  px-4  py-2  text-gray-800  hover:bg-gray-100">
-            戒指
-          </a>
-        </div>
-      </div>
-
-
-      <div>
-        <a href="Privacy">
-        <button className="Privacy   text-xl  text-gray-800  p-2  flex  items-center  shadow-gray-950 space-x-1">
-          <span>隱私政策</span>
-        </button></a>
-      </div>
-
-    </div>
+      </nav>
+    </div></div>
   );
 }
 

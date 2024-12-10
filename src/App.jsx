@@ -1,88 +1,42 @@
-import { useState, useEffect } from "react";
-import { getAuthToken } from "./utils";
-import { getMe } from "./WebAPI";
-import React from "react";
-import RoutesComponent from "./RoutesComponent";
-import HomePage from "./HomePage";
-import Information from "./Information";
-import ProductInformation from "./ProductInformation";
-import PayAndTo from "./PayAndTo";
-import Question from "./Question";
-import Privacy from "./Privacy";
-import HotThing from "./HotThing";
-import AllProducts from "./AllProducts";
-import Clothes from "./Clothes";
-import Pants from "./Pants";
-import Skirt from "./Skirt";
-import Dress from "./Dress";
-import Coat from "./Coat";
-import Accessories from "./Accessories";
-import Ring from "./Ring";
-import Earring from "./Earring";
-import Necklace from "./Necklace";
-import Login from "./Login";
-import ForgetPassword from "./ForgetPassword";
-import MyAccount from "./MyAccount";
+import React, { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // 引入 Firebase 的身份驗證模組
 import AuthContext from "./contexts";
+import RoutesComponent from "./RoutesComponent";
+import { Provider } from "react-redux";
+import { store } from "./store"; // 引入 store
 
 function App() {
   const [user, setUser] = useState(null);
   const [isLoadingGetMe, setLoadingGetMe] = useState(true);
+
   useEffect(() => {
-    // 以 getAuthToken 從 localStorage 讀取 token
-    if (getAuthToken()) {
-      // 有 token 才 call API
-      getMe()
-        .then((response) => {
-          if (response.ok) {
-            setUser(response.data);
-          }
-          setLoadingGetMe(false);
-        })
-        .catch(() => {
-          setLoadingGetMe(false);
-        });
-    } else {
-      setLoadingGetMe(false);
-    }
+    const auth = getAuth(); // 獲取 Firebase 的身份驗證實例
+
+    // 監聽身份驗證狀態變化
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser); // 設置用戶資料
+      } else {
+        setUser(null); // 沒有用戶時設為 null
+      }
+      setLoadingGetMe(false); // 設置加載狀態為 false
+    });
+
+    return () => unsubscribe(); // 清理監聽
   }, []);
+
+  // 如果還在加載中，隱藏內容不進行渲染
   if (isLoadingGetMe) {
-    return <div>Loading...</div>; // 在加載時顯示 Loading
+    return null; // 這裡可以返回 Loading 組件或其他內容
   }
 
   return (
-    <>
-      <AuthContext.Provider value={{ user, setUser }}>
-        <RoutesComponent>
-          <HomePage />
-
-          <Login />
-          <ForgetPassword/>
-          <MyAccount/>
-
-          <Information>
-            <ProductInformation />
-            <PayAndTo />
-            <Question />
-          </Information>
-
-          <AllProducts />
-          <HotThing />
-          <Clothes />
-          <Pants />
-          <Skirt />
-          <Dress />
-          <Coat />
-
-          <Accessories />
-          <Ring />
-          <Earring />
-          <Necklace />
-
-          <Privacy />
-        </RoutesComponent>
-      </AuthContext.Provider>
-    </>
+    <AuthContext.Provider value={{ user, setUser }}>
+      {/* Redux Provider 應該包裹整個應用 */}
+      <Provider store={store}>
+        <RoutesComponent /> {/* 路由管理應該包含所有頁面 */}
+      </Provider>
+    </AuthContext.Provider>
   );
 }
 

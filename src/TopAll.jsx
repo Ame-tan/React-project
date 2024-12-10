@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   UserIcon,
   ShoppingCartIcon,
@@ -7,22 +7,69 @@ import {
 } from "@heroicons/react/solid";
 import icon from "./ICON.png";
 import NavColumn from "./NavColumn";
-import { useLocation, useNavigate } from "react-router-dom";
-import AuthContext from "./contexts"; // 確保正確導入 AuthContext
-import { setAuthToken } from "./utils"; // 確保正確導入 setAuthToken
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { getAuth } from "firebase/auth"; // 引入 Firebase 的身份驗證模組
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart } from "./cartSlice"; // 引入保存購物車到 Firestore 的函數
+import { db } from "./firebase"; // 確保正確的導入路徑
+import { doc, setDoc } from "firebase/firestore";
+import AuthContext from "./contexts";
 
 function TopAll() {
+  const dispatch = useDispatch(); // 使用 useDispatch
+  const auth = getAuth(); // 獲取 Firebase 的身份驗證實例
   const location = useLocation();
-  const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { user, setUser } = useContext(AuthContext);
 
-  const handleLogout = () => {
-    setAuthToken("");
-    setUser(null);
-    if (location.pathname !== "/") {
-      navigate("/");
+  // 使用 useSelector 從 Redux 中獲取 cartItems
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const handleLogout = async (location, navigate) => {
+    const user = auth.currentUser; // 獲取當前用戶
+
+    if (user) {
+      try {
+        // 儲存購物車到 Firestore
+        await saveCartToFirestore(user.uid, cartItems);
+        setUser(auth.currentUser);
+      } catch (error) {
+        console.error("儲存購物車失敗：", error);
+      }
+    }
+
+    try {
+      await auth.signOut();
+      dispatch(clearCart()); // 清空購物車
+
+      // 若當前頁面不是首頁，登出後導向首頁
+      if (location.pathname !== "/") {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("登出失敗：", error);
     }
   };
+
+  // 用於將購物車資料儲存到 Firestore 的新函數
+  const saveCartToFirestore = async (userId, cartItems) => {
+    await setDoc(doc(db, "carts", userId), {
+      items: cartItems,
+      updatedAt: new Date(),
+    });
+  };
+
+  // 新增：用於清空購物車的 useEffect
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        dispatch(clearCart([])); // 用戶登出時清空購物車
+      }
+    });
+
+    // 清理訂閱
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,147 +77,160 @@ function TopAll() {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("提交成功");
-    setIsOpen(false); // 提交後關閉模態框
+    setIsOpen(false); // 提交後關閉
   };
+
   // 點擊背景遮罩部分來關閉
   const handleOverlayClick = () => {
     setIsOpen(false);
   };
-  // 阻止點擊事件從表單傳遞到背景遮罩(沒有設定就會變成點表單部分也會關閉)
+
+  // 阻止點擊事件從表單傳遞到背景遮罩
   const handleFormClick = (e) => {
     e.stopPropagation();
   };
 
   return (
-    <div className="TOP-Container    bg-red-50  w-full  h-40  p-4  flex  flex-col  justify-between">
-      <div className="TOP-1   flex  space-x-4   justify-end">
-        <div className="flex-grow  flex  justify-center  pl-96">
-          <button className="focus:outline-none">
-            <a href="/">
-              <img src={icon} className="h-16  w-auto  pb-2 " />
-            </a>
-          </button>
-        </div>  
-
-        {!user ? (
-          <a href="Login">
-            <div className="Login text-xl border-gray-400 border-2 rounded-md text-gray-800 p-2 flex items-center space-x-2">
-              <UserIcon className="w-5 h-5 text-gray-800" />
-              <span>登入會員</span>
-            </div>
-          </a>
-        ) : (
-          <>
-            <a href="Logout">
+    <>
+      <div className="top-container md:flex md:flex-col md:items-center">
+        <Link to="/">
+          <img
+            src={icon}
+            className="  md:h-20 h-14  md:block hidden"
+            alt="Logo"
+          />
+        </Link>
+        <div className="md:w-3/4 md:border-b border-gray-300 md:mt-4 mx-auto block justify-center items-center w-10 z-10 h-10"></div>
+      </div>
+      <div
+        className="md:fixed hidden  md:top-0.5  md:right-2  md:z-10  md:bg-red-50  md:p-2  md:rounded-lg  md:shadow-md
+                      md:justify-center"
+      >
+        <div className="flex  space-x-4">
+          {!auth.currentUser ? (
+            <Link to="/Login">
               <div
-                onClick={handleLogout}
-                className="Logout text-xl border-gray-400 border-2 rounded-md text-gray-800 p-2 flex items-center space-x-2 cursor-pointer"
+                className="container:lg  text-sm  md:text-base  border-gray-400  border  rounded-md
+                            text-gray-800  p-2  flex  items-center  space-x-2"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="size-6"
+                <UserIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
+                <span>登入會員</span>
+              </div>
+            </Link>
+          ) : (
+            <>
+              <Link to="/">
+                <div
+                  onClick={() => handleLogout(location, navigate)}
+                  className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
+                            text-gray-800  p-2  flex  items-center  space-x-2"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>登出</span>
-              </div>
-            </a>
-            <a href="/MyAccount">
-              <div className="Logout text-xl border-gray-400 border-2 rounded-md text-gray-800 p-2 flex items-center space-x-2 cursor-pointer">
-                <UserCircleIcon className="w-5 h-5 text-gray-800" />
-                <span>我的帳戶</span>
-              </div>
-            </a>
-          </>
-        )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-4  h-4  md:w-5  md:h-5 text-gray-800"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>登出</span>
+                </div>
+              </Link>
 
-        <a href="#!">
-          <div className="Shop   text-xl   border-gray-400  border-2  rounded-md  text-gray-800  p-2  flex  items-center  space-x-2">
-            <ShoppingCartIcon className="w-5  h-5  text-gray-800" />
-            <span>購物車</span>
-          </div>
-        </a>
+              <Link to="/MyAccount">
+                <div
+                  className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
+                            text-gray-800  p-2  flex  items-center  space-x-2"
+                >
+                  <UserCircleIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
+                  <span>我的帳戶</span>
+                </div>
+              </Link>
+            </>
+          )}
 
-        <div>
+          <Link to="/ShopCar">
+            <div
+              className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
+                            text-gray-800  p-2  flex  items-center  space-x-2"
+            >
+              <ShoppingCartIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
+              <span>購物車</span>
+            </div>
+          </Link>
+
           <button
             onClick={() => setIsOpen(true)}
-            className="Contact   text-xl  border-gray-400  border-2  rounded-md  text-gray-800  p-2  flex  items-center  space-x-2"
+            className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
+                            text-gray-800  p-2  flex  items-center  space-x-2"
           >
-            <ChatIcon className="w-5  h-5  text-gray-800" />
+            <ChatIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
             <span>聯絡我們</span>
           </button>
         </div>
       </div>
-      {/* 彈出表格 */}
+
+      <NavColumn />
+
       {isOpen && (
         <div
           onClick={handleOverlayClick}
-          className="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center z-50"
+          className="fixed  inset-0  bg-gray-800  bg-opacity-70  flex  items-center  justify-center  z-50"
         >
           <div
             onClick={handleFormClick}
-            className="bg-white p-6 rounded-lg w-1/3 shadow-lg"
+            className="bg-white  p-6  rounded-lg  xl:w-1/3 w-3/4  shadow-lg"
           >
-            <h2 className="text-xl font-bold mb-4">聯絡我們</h2>
-            <p>
+            <h2 className="text-lg md:text-xl font-bold mb-4">聯絡我們</h2>
+            <p className="text-sm md:text-base mb-4">
               謝謝您的主動聯絡，請留下要諮詢的問題，我們會用以下資訊進行回覆。
             </p>
             <form onSubmit={handleSubmit}>
-              {user ? (
-              <div className="mb-4">
-                <label className="block  mb-2 mt-4" htmlFor="name">
-                  您的電郵：user01@gmail.com
-                </label>
-              </div>) : (
-              <div className="mb-4">
-              <label className="block  mb-2 mt-4" htmlFor="name">
-                您的聯絡方式：
-              </label>
-              <input
-                    className="w-full px-2 pt-2 border border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-transparent transition duration-150 ease-in-out"
-                    type="email"
-                    id="email"
-                    placeholder="請輸入您的聯絡方式（如：信箱）"
-                    required
+              {auth.currentUser ? (
+                <div className="mb-4">
+                  <label className="block mb-2 mt-4 text-sm md:text-base">
+                    電子信箱：{auth.currentUser.email}
+                  </label>
+                  <textarea
+                    id="description"
+                    className="resize-none w-full px-2 py-2 h-36 border rounded-md "
+                    placeholder="輸入你的訊息"
                   />
                 </div>
+              ) : (
+                <>
+                  <div className="mb-4">
+                    <input
+                      type="email"
+                      className="w-full border rounded-md  p-2"
+                      placeholder="輸入你的信箱"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <textarea
+                      className="resize-none w-full h-36 border rounded-md px-2 py-2"
+                      placeholder="輸入你的訊息"
+                    />
+                  </div>
+                </>
               )}
-
-              <div className="mb-4">
-                <textarea
-                  className="w-full h-40 px-2 pt-2  border border-gray-400 focus:outline-none focus:ring-2 focus:ring-red-200
-                  focus:border-transparent  transition  duration-150 ease-in-out "
-                  type="text"
-                  id="text"
-                  placeholder="請輸入您的訊息。詢問商品時請留下商品名稱，也歡迎您留下電子信箱以外的聯絡方式，謝謝！"
-                  required
-                />
-              </div>
-
-              <div className="flex justify-end ">
+              <div className="text-end">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-red-400 hover:bg-red-300 text-white rounded-md"
+                  className="bg-red-500 text-white text-sm md:text-base px-6 py-2 rounded-md shadow-md hover:bg-red-700"
                 >
-                  提交
+                  送出
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
-      <div className="flex justify-center my-3">
-        <div className="border-b border-gray-200 w-1/2" />
-      </div>
-      <NavColumn />
-    </div>
+    </>
   );
 }
 

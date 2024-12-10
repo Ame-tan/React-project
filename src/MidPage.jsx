@@ -1,71 +1,89 @@
-import React from "react";
-import useSWR from "swr";
-import axios from "axios";
+import React, { useEffect, useState, useContext } from "react";
+import $ from "jquery";
 import ImageCarousel from "./ImageCarousel";
-
-const fetcher = (url) => axios.get(url).then((res) => res.data);
+import AddToCartAlert from "./AddToCartAlert";
+import ProductItem from "./ProductItem";
+import AuthContext from "./contexts";
 
 function MidPage() {
-  const { data, error } = useSWR("http://localhost:4000/Images", fetcher);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const { user } = useContext(AuthContext);
+  const [alertMessage, setAlertMessage] = useState("");
 
-  console.log("Data:", data);
-  console.log("Error:", error);
+  const handleAddToCartAlert = () => {
+    setAlertMessage(user ? "加入成功！" : "請先登入！");
+    setShowAlert(true);
+  };
 
-  const images = data || [];
+  const closeAlert = () => {
+    setShowAlert(false);
+  };
 
-  if (error) return <div>Failed to load: {error.message}</div>;
+  useEffect(() => {
+    // 獲取所有產品
+    $.ajax({
+      url: "http://localhost:4000/products?_embed=images",
+      method: "GET",
+      success: function (response) {
+        setData(response);
+        setLoading(false);
+        console.log(response);
+      },
+      error: function (jqXHR, textStatus) {
+        setError(`Error: ${textStatus}`);
+        setLoading(false);
+      },
+    });
+  }, []);
 
-  const homeImages = images.filter((h) => h.category !== "飾品");
+  if (error) return <p>{error}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (!data) return <div>Product not found</div>;
+
+  // 確保 data 是一個數組，如果 data 未定義，設置為空數組
+  const HomeProducts = (data || []).filter(
+    (product) => product.category !== "飾品"
+  );
 
   return (
     <>
-      <div className="Container bg-white w-full max-h-1000px p-4 flex items-center justify-center">
+      <div className="ImageCarousel  container  bg-white  px-10  py-10">
         <ImageCarousel />
       </div>
 
-      <div className="Container2 bg-white w-full h-screen p-11 flex flex-col items-center">
-
-        <div className="bg-orange-200 bg-opacity-60 w-4/6 h-24 max-h-24 flex flex-col justify-center text-amber-950 text-xl p-8 shadow-xl border-4 border-orange-100">
-          <span className="font-bold">所有商品</span>
-          <span className="font-light">All products</span>
-        </div>
-
-
-        <div className="flex w-full h-full mt-20 justify-center">
-          <div className="grid grid-cols-4 gap-20 ">
-            {homeImages.map((h) => (
-              <div
-                key={h.id}
-                className="bg-white cursor-pointer relative w-full h-full max-h-60 max-w-60  mb-10"
-              >
-                <div className="relative group  ">
-                  <button>
-                    <img src={h.image} alt={h.description} />
-                  </button>
-                  
-                  <div className="absolute bottom-1 left-0 h-10 w-full flex items-center justify-center text-xl text-white bg-slate-600 bg-opacity-70 opacity-0 group-hover:opacity-100 z-10">
-                    加入購物車
-                  </div>
-                </div>
-
-
-                <div className="relative group  ">
-
-                  <div className=" flex-wrap flex text-left text-lg font-bold text-gray-500 bg-opacity-70 group-hover:text-gray-950">
-                    {h.description}
-                  </div>
-                  
-                  <div className="flex text-left text-lg font-bold text-gray-500">
-                    {h.money}
-                  </div>
-
-                </div>
-              </div>
-            ))}
+      <div className="product-container">
+        <div className="product-toptext">
+          <div className="homepage-product-tag sm:mx-2 md:mx-2 ">
+            <span className="md:font-bold pl-2">所有商品</span>
+            <span className="md:font-light pl-2">All products</span>
           </div>
         </div>
 
-
+        <div className="product-grid-container">
+          <div className="product-grid">
+            {HomeProducts.map((product) => {
+              const firstImage =
+                product.images && product.images.length > 0
+                  ? product.images[0].path
+                  : null;
+              // map 函數內記得正確return返回 ( ProductItem 組件 )
+              return (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  image={firstImage}
+                  onAddToCart={handleAddToCartAlert}
+                />
+              );
+            })}
+            {showAlert && (
+              <AddToCartAlert message={alertMessage} onClose={closeAlert} />
+            )}
+          </div>
+        </div>
       </div>
     </>
   );

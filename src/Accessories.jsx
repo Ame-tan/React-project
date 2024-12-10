@@ -1,65 +1,70 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import TopAll from "./TopAll";
 import useSWR from "swr";
 import axios from "axios";
-
+import AddToCartAlert from "./AddToCartAlert";
+import ProductItem from "./ProductItem";
+import AuthContext from "./contexts";
+import EndPage from "./EndPage";
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 
 function Accessories() {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const { user } = useContext(AuthContext);
 
-    const { data, error } = useSWR("http://localhost:4000/Images", fetcher);
+  const handleAddToCartAlert = () => {
+    setAlertMessage(user ? "加入成功！" : "請先登入！");
+    setShowAlert(true);
+  };
+
+  const closeAlert = () => {
+    setShowAlert(false);
+  };
+
+    const { data, error } = useSWR("http://localhost:4000/products?_embed=images&category=飾品", fetcher);
 
     console.log("Data:", data);
     console.log("Error:", error);
   
-    const images = data || [];
+    if (!data) return <div>Loading...</div>;
   
-    if (error) return <div>Failed to load: {error.message}</div>;
-
-    const accessoriesImages = images.filter((a) => a.category === "飾品");
+    const accessoriesProducts =(data||[]).filter((product) => product.category === "飾品");
 
   return (
     <>
       <TopAll />
 
-      <div className="Container2 bg-white w-full h-screen p-11 flex flex-col items-center">
-        <div className="w-4/6 h-0 flex justify-start text-amber-950 text-xl ">
-          <span className="font-black">飾品</span>
+      <div className="product-toptext-container">
+        <div className="product-toptext">
+          <span>飾品</span>
         </div>
 
-        <div className="flex w-full h-full mt-20 justify-center">
-          <div className="grid grid-cols-4 gap-20 ">
-            {accessoriesImages.map((a) => (
-              <div
-                key={a.id}
-                className="bg-white cursor-pointer relative w-full h-full max-h-60 max-w-60  mb-10"
-              >
-                <div className="relative group">
-                  <button>
-                    <img src={a.image} alt={a.description}/>
-                  </button>
-
-                  <div className="absolute bottom-1 left-0 h-10 w-full flex items-center justify-center text-xl text-white bg-slate-600 bg-opacity-70 opacity-0 group-hover:opacity-100 z-10">
-                    加入購物車
-                  </div>
-                </div>
-
-                <div className="relative group  ">
-                  <div className=" flex-wrap flex text-left text-lg font-bold text-gray-500 bg-opacity-70 group-hover:text-gray-950">
-                    {a.description}
-                  </div>
-
-                  <div className="flex text-left text-lg font-bold text-gray-500">
-                    {a.money}
-                  </div>
-                </div>
-              </div>
-            ))}
+        <div className="product-grid-container">
+          <div className="product-grid">
+          {accessoriesProducts.map((product) => {
+              const firstImage =
+                product.images && product.images.length > 0
+                  ? product.images[0].path
+                  : null;
+              return (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  image={firstImage}
+                  onAddToCart={handleAddToCartAlert}
+                />
+              );
+            })}
+            {showAlert && (
+              <AddToCartAlert message={alertMessage} onClose={closeAlert} />
+            )}
           </div>
         </div>
       </div>
+      <EndPage/>
     </>
   );
 }

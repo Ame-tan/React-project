@@ -1,13 +1,14 @@
 import React from "react";
-import TopAll from "./TopAll"
+import TopAll from "./TopAll";
+import EndPage from "./EndPage";
 
 function ProductInformation() {
   return (
     <>
-      <TopAll/>
+      <TopAll />
 
-      <div className="bg-white w-full max-h-1000px p-4 flex items-center justify-center ">
-        <div className="w-1/2 h-1000px  p-20  text-lg ">
+      <div className="product-text-container">
+        <div className="lg:w-1/2 h-auto  lg:p-20  p-10  text-lg ">
           // 商 品 資 訊 //
           <br />
           <br />
@@ -62,6 +63,7 @@ function ProductInformation() {
           🔺小提醒：商品呈現顏色會因電腦螢幕有所差異，以實體顏色為標準，如果女孩非常在意色差也請好好考慮後再做決定
         </div>
       </div>
+      <EndPage />
     </>
   );
 }

@@ -1,14 +1,15 @@
 import React from "react";
 import TopAll from "./TopAll"
+import EndPage from "./EndPage";
 
 function Privacy() {
   return (
     <>
       <TopAll/>
 
-      <div className="bg-white w-full max-h-1000px p-4 flex items-center justify-center ">
-        <div className="w-1/2 h-1000px  p-20  text-lg ">
-          <div className="flex items-center justify-center pb-20 font-bold text-2xl">
+      <div className="container  lg:flex  lg:items-center  lg:justify-center  bg-white">
+        <div className="lg:w-1/2 h-1000px  lg:p-20  p-10 text-lg">
+          <div className="flex items-center lg:justify-center justify-start pb-20 font-bold text-2xl">
             隱私政策
           </div>
           <div className="font-bold">一、隱私權保護政策的適用範圍</div>
@@ -112,6 +113,7 @@ function Privacy() {
           </div>
         </div>
       </div>
+      <EndPage/>
     </>
   );
 }
