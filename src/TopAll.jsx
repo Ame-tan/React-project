@@ -20,7 +20,7 @@ function TopAll() {
   const auth = getAuth(); // 獲取 Firebase 的身份驗證實例
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   // 使用 useSelector 從 Redux 中獲取 cartItems
   const cartItems = useSelector((state) => state.cart.items);
@@ -92,29 +92,99 @@ function TopAll() {
 
   return (
     <>
-      <div className="top-container md:flex md:flex-col md:items-center">
+      <div className="top-container">
         <Link to="/">
           <img
             src={icon}
-            className="  md:h-20 h-14  md:block hidden"
+            className="container  h-20  md:block  hidden"
             alt="Logo"
           />
         </Link>
-        <div className="md:w-3/4 md:border-b border-gray-300 md:mt-4 mx-auto block justify-center items-center w-10 z-10 h-10"></div>
-      </div>
-      <div
-        className="md:fixed hidden  md:top-0.5  md:right-2  md:z-10  md:bg-red-50  md:p-2  md:rounded-lg  md:shadow-md
-                      md:justify-center"
-      >
-        <div className="flex  space-x-4">
+        <div className="container   h-4  md:border-b  border-gray-300   md:block  hidden"></div>
+
+        <NavColumn />
+
+        <div className="fixed top-0 left-0 w-full bg-red-50 z-50 py-2 px-1">
+          <div className="flex items-center justify-start w-full max-w-full space-x-4 md:hidden">
+            <NavColumn className="<nav>" />
+
+            <div className="icon ">
+              <Link to="/">
+                <img
+                  src={icon}
+                  className="h-14  z-50 w-auto max-w-28"
+                  alt="Logo"
+                />
+              </Link>
+            </div>
+
+            {!auth.currentUser ? (
+              <Link to="/Login">
+                <div className="md:px-4 container min-w-12 h-10 text-sm md:text-base md:border-gray-400 md:border md:rounded-md md:text-gray-800 md:flex md:items-center md:space-x-2 hidden">
+                  <UserIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
+                  <span className="xl:block hidden">登入會員</span>
+                </div>
+              </Link>
+            ) : (
+              <>
+                <Link to="/">
+                  <div
+                    onClick={() => handleLogout(location, navigate)}
+                    className="md:px-4 min-w-12 h-10 text-sm md:text-base md:border-gray-400 md:border md:rounded-md md:text-gray-800 md:flex md:items-center md:space-x-2 hidden"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4 md:w-5 md:h-5 text-gray-800 md:block hidden"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="xl:block hidden">登出</span>
+                  </div>
+                </Link>
+
+                <Link to="/MyAccount">
+                  <div className="px-4 min-w-12 h-10 text-sm md:text-base border-gray-400 border rounded-md text-gray-800 p-2 flex items-center space-x-2">
+                    <UserCircleIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
+                    <span className="xl:block hidden">我的帳戶</span>
+                  </div>
+                </Link>
+              </>
+            )}
+
+            {/* 購物車 */}
+            <Link to="/ShopCar">
+              <div className="px-4 min-w-12 h-10 text-sm md:text-base border-gray-400 border rounded-md text-gray-800 p-2 flex items-center space-x-2">
+                <ShoppingCartIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
+                <span className="xl:block hidden">購物車</span>
+              </div>
+            </Link>
+
+            {/* 聯絡我們 */}
+            <button
+              onClick={() => setIsOpen(true)}
+              className="px-4 min-w-12 h-10 text-sm md:text-base border-gray-400 border rounded-md text-gray-800 p-2 flex items-center space-x-2"
+            >
+              <ChatIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
+              <span className="xl:block hidden">聯絡我們</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="absolute container py-2  w-auto right-0  flex z-40 items-center space-x-2 px-2 justify-end">
           {!auth.currentUser ? (
             <Link to="/Login">
               <div
-                className="container:lg  text-sm  md:text-base  border-gray-400  border  rounded-md
-                            text-gray-800  p-2  flex  items-center  space-x-2"
+                className="md:px-4   container min-w-12  h-10  text-sm  md:text-base  md:border-gray-400  md:border  md:rounded-md
+                              md:text-gray-800    md:flex  md:items-center  md:space-x-2 hidden "
               >
                 <UserIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
-                <span>登入會員</span>
+                <span className="xl:block hidden">登入會員</span>
               </div>
             </Link>
           ) : (
@@ -122,14 +192,14 @@ function TopAll() {
               <Link to="/">
                 <div
                   onClick={() => handleLogout(location, navigate)}
-                  className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
-                            text-gray-800  p-2  flex  items-center  space-x-2"
+                  className="md:px-4 min-w-12  h-10  text-sm  md:text-base  md:border-gray-400  md:border  md:rounded-md
+                              md:text-gray-800    md:flex  md:items-center  md:space-x-2 hidden  "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="w-4  h-4  md:w-5  md:h-5 text-gray-800"
+                    className="w-4  h-4  md:w-5  md:h-5 text-gray-800 md:block hidden"
                   >
                     <path
                       fillRule="evenodd"
@@ -137,17 +207,17 @@ function TopAll() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span>登出</span>
+                  <span className="xl:block hidden">登出</span>
                 </div>
               </Link>
 
               <Link to="/MyAccount">
                 <div
-                  className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
-                            text-gray-800  p-2  flex  items-center  space-x-2"
+                  className="px-4   min-w-12  h-10 text-sm  md:text-base  border-gray-400  border  rounded-md
+                              text-gray-800  p-2  flex  items-center  space-x-2"
                 >
                   <UserCircleIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
-                  <span>我的帳戶</span>
+                  <span className="xl:block hidden">我的帳戶</span>
                 </div>
               </Link>
             </>
@@ -155,31 +225,28 @@ function TopAll() {
 
           <Link to="/ShopCar">
             <div
-              className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
-                            text-gray-800  p-2  flex  items-center  space-x-2"
+              className="px-4  min-w-12  h-10 text-sm  md:text-base  border-gray-400  border  rounded-md
+                              text-gray-800  p-2  flex  items-center  space-x-2"
             >
               <ShoppingCartIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
-              <span>購物車</span>
+              <span className="xl:block hidden">購物車</span>
             </div>
           </Link>
 
           <button
             onClick={() => setIsOpen(true)}
-            className="px-4  text-sm  md:text-base  border-gray-400  border  rounded-md
-                            text-gray-800  p-2  flex  items-center  space-x-2"
+            className="px-4 min-w-12  h-10 text-sm  md:text-base  border-gray-400  border  rounded-md
+                              text-gray-800  p-2  flex  items-center  space-x-2"
           >
             <ChatIcon className="w-4  h-4  md:w-5  md:h-5  text-gray-800" />
-            <span>聯絡我們</span>
+            <span className="xl:block hidden">聯絡我們</span>
           </button>
         </div>
       </div>
-
-      <NavColumn />
-
       {isOpen && (
         <div
           onClick={handleOverlayClick}
-          className="fixed  inset-0  bg-gray-800  bg-opacity-70  flex  items-center  justify-center  z-50"
+          className="fixed  inset-0  bg-gray-800  bg-opacity-70  flex  items-center  justify-center z-50"
         >
           <div
             onClick={handleFormClick}

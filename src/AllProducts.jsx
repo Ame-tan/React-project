@@ -43,7 +43,7 @@ function AllProducts() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>所有商品</span>
         </div>

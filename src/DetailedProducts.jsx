@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux"; // 引入 useDispatch
-import { addToCart } from "./cartSlice"; // 引入 addToCart action
 import $ from "jquery";
 import TopAll from "./TopAll";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import AuthContext from "./contexts";
 import AddToCartAlert from "./AddToCartAlert"; // 引入 AddToCartAlert 組件
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import EndPage from "./EndPage";
 import { money } from "./utils";
-import { handleAddToCartWithPrice  } from "./AddPriceToCart"; // 引入 Redux action
+import { handleAddToCartWithPrice } from "./AddPriceToCart"; // 引入 Redux action
 
 function DetailedProducts() {
   const { id } = useParams(); // 獲取當前商品的ID
@@ -23,7 +22,7 @@ function DetailedProducts() {
   const sizeOptions = ["S", "M", "L"];
   const [color, setColor] = useState([]);
   const [openColor, setOpenColor] = useState(false);
-  const [goods , setGoods] = useState([]);
+  const [goods, setGoods] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(""); // 提示消息
   const { user } = useContext(AuthContext);
@@ -36,18 +35,21 @@ function DetailedProducts() {
   const [nowImage, setNowImage] = useState(0);
 
   const handleAddToCartAlert = () => {
-    if (data.category === "飾品") { // 如果是飾品，不需要檢查尺寸
+    if (data.category === "飾品") {
+      // 如果是飾品，不需要檢查尺寸
       if (!goods.length) {
         setAlertMessage("請選擇現購或預購！");
       } else {
         addToCartItem();
       }
     } else {
-      if (size.length===0) {
+      if (size.length === 0) {
         setAlertMessage("請選擇尺寸！");
-      } else if (data.id === "12" && !color.length) {  // 檢查id為12 且 未選擇顏色
+      } else if (data.id === "12" && !color.length) {
+        // 檢查id為12 且 未選擇顏色
         setAlertMessage("請選擇顏色！");
-      } else if (!goods.length) { // 確保 goods 被選擇
+      } else if (!goods.length) {
+        // 確保 goods 被選擇
         setAlertMessage("請選擇現購或預購！");
       } else {
         addToCartItem();
@@ -67,11 +69,12 @@ function DetailedProducts() {
       };
 
       // 檢查購物車中是否已存在相同商品
-      const existingItem = cartItems.find(item =>
-        item.productId === product.id &&
-        JSON.stringify(item.color) === JSON.stringify(product.color) &&
-        JSON.stringify(item.goods) === JSON.stringify(product.goods) &&
-        JSON.stringify(item.size) === JSON.stringify(product.size)
+      const existingItem = cartItems.find(
+        (item) =>
+          item.productId === product.id &&
+          JSON.stringify(item.color) === JSON.stringify(product.color) &&
+          JSON.stringify(item.goods) === JSON.stringify(product.goods) &&
+          JSON.stringify(item.size) === JSON.stringify(product.size)
       );
 
       if (existingItem) {
@@ -104,8 +107,6 @@ function DetailedProducts() {
       setAlertMessage("請先登入！");
     }
   };
-  
-  
 
   const closeAlert = () => {
     setShowAlert(false);
@@ -158,24 +159,24 @@ function DetailedProducts() {
   return (
     <>
       <TopAll />
-      <div className="flex w-full  h-full items-center justify-center py-10 lg:pr-50 lg:py-20">
-        <div className="lg:flex lg:w-full h-full lg:items-start items-center justify-center">
+      <div className="detailed-product-container container">
+        <div className=" lg:flex w-auto h-full lg:items-start items-center justify-center">
           {/* 主圖區 */}
-          <div className="flex-col lg:w-96 lg:h-auto w-auto px-5 lg:items-center lg:justify-start justify-center ">
+          <div className="flex-col  container lg:flex lg:w-96 lg:h-full w-full px-5 ">
             {images[nowImage] && (
               <img
                 key={images[nowImage].id}
-                className="lg:flex lg:w-96 lg:h-96 lg:object-cover w-full"
+                className=" lg:flex lg:w-96 lg:h-96 h-auto w-auto lg:object-cover"
                 src={images[nowImage].path}
                 alt={`Product Image ${images[nowImage].id}`}
               />
             )}
             {/* 縮圖區 */}
-            <div className="flex mt-6 space-x-6 justify-start items-center ">
+            <div className="thumbnails-container">
               {images.slice(0, 3).map((image, changeTouch) => (
                 <img
                   key={image.id}
-                  className={`w-24 h-24 object-cover border cursor-pointer ${
+                  className={`thumbnail border ${
                     nowImage === changeTouch ? "border-blue-500" : ""
                   }`}
                   src={image.path}
@@ -192,8 +193,8 @@ function DetailedProducts() {
             </h1>
             <p className="flex mt-2 font-bold text-2xl">NT${Money}</p>
 
-           {/* 尺寸選擇區，僅在category不為"飾品"時顯示 */}
-           {data.category !== "飾品" && (
+            {/* 尺寸選擇區，僅在category不為"飾品"時顯示 */}
+            {data.category !== "飾品" && (
               <div className="relative w-full mt-10 mb-5">
                 <div
                   className="cursor-pointer w-full text-xl text-gray-800 p-2 bg-white border border-gray-300 rounded-md flex justify-between items-center"
@@ -204,49 +205,49 @@ function DetailedProducts() {
                 </div>
 
                 {openSize && (
-          <div className="absolute w-full z-10 bg-white border border-gray-300 rounded-md mt-1">
-            {sizeOptions.map((sizeOption, index) => (
-              <div
-                key={index}
-                className="p-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleSelectSize(sizeOption)}
-              >
-                {sizeOption}
+                  <div className="absolute w-full z-10 bg-white border border-gray-300 rounded-md mt-1">
+                    {sizeOptions.map((sizeOption, index) => (
+                      <div
+                        key={index}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSelectSize(sizeOption)}
+                      >
+                        {sizeOption}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    )}
+            )}
 
             {/* 顏色選擇區 */}
-            {data.id==="12" &&(
-                <div className="relative w-full mt-4">
-                  <div
-                    className="cursor-pointer w-full text-xl text-gray-800 p-2 bg-white border border-gray-300 rounded-md flex justify-between items-center"
-                    onClick={() => setOpenColor(!openColor)}
-                  >
-                    {color.length ? color: "請選擇顏色" }
-                    <ChevronDownIcon className="w-5 h-5 text-gray-800 " />
-                  </div>
-
-                  {openColor && (
-                    <div className="absolute w-full bg-white border border-gray-300 rounded-md mt-1">
-                      {data.color.map((colorOption, index) => (
-                        <div
-                          key={index}
-                          className="p-2 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleSelectColor(colorOption)}
-                        >
-                          {colorOption}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+            {data.id === "12" && (
+              <div className="relative w-full mt-4">
+                <div
+                  className="cursor-pointer w-full text-xl text-gray-800 p-2 bg-white border border-gray-300 rounded-md flex justify-between items-center"
+                  onClick={() => setOpenColor(!openColor)}
+                >
+                  {color.length ? color : "請選擇顏色"}
+                  <ChevronDownIcon className="w-5 h-5 text-gray-800 " />
                 </div>
-              )}
 
-                          {/* 現購與預購選擇區 */}
+                {openColor && (
+                  <div className="absolute w-full bg-white border border-gray-300 rounded-md mt-1">
+                    {data.color.map((colorOption, index) => (
+                      <div
+                        key={index}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSelectColor(colorOption)}
+                      >
+                        {colorOption}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 現購與預購選擇區 */}
             <div className="flex mt-4 space-x-4">
               {data.goods.map((goodsOption, index) => (
                 <button
@@ -276,7 +277,7 @@ function DetailedProducts() {
                 min="1"
                 value={quantity} // 使用 value 屬性
                 readOnly
-                className="border rounded-md p-2 w-16 text-center "
+                className="border rounded-md p-2 w-full text-center "
               />
               <button
                 onClick={() => setQuantity(quantity + 1)}
@@ -288,11 +289,20 @@ function DetailedProducts() {
 
             <button
               onClick={handleAddToCartAlert}
-              disabled={ data.category === "飾品"
-                ? goods.length === 0 // 如果是飾品，僅需檢查 goods 是否被選擇
-                : !(size && goods.length > 0 && (data.id !== "12" || color.length > 0))}
+              disabled={
+                data.category === "飾品"
+                  ? goods.length === 0 // 如果是飾品，僅需檢查 goods 是否被選擇
+                  : !(
+                      size &&
+                      goods.length > 0 &&
+                      (data.id !== "12" || color.length > 0)
+                    )
+              }
               className={`mt-6 py-2 rounded-md ${
-                size && goods.length > 0 && (data.id !== "12" || color.length > 0)||(data.category === "飾品" && goods.length>0)
+                (size &&
+                  goods.length > 0 &&
+                  (data.id !== "12" || color.length > 0)) ||
+                (data.category === "飾品" && goods.length > 0)
                   ? "bg-red-400 text-white"
                   : "bg-gray-300 text-gray-400"
               }`}
@@ -307,7 +317,7 @@ function DetailedProducts() {
       {showAlert && (
         <AddToCartAlert message={alertMessage} onClose={closeAlert} />
       )}
-      <EndPage/>
+      <EndPage />
     </>
   );
 }

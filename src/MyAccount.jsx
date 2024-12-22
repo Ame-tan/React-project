@@ -20,16 +20,16 @@ function MyAccount() {
   return (
     <>
       <TopAll />
-      <div className="relative z-0 bg-white w-full min-h-screen p-4 md:p-11 flex flex-col items-center">
-        <div className="flex w-full mt-10 justify-center">
-          <div className="flex flex-col w-full md:w-2/3 space-y-10">
-            <div className="flex space-x-8 border-b pb-4">
+      <div className="account-container">
+        <div className="flex  w-full  mt-10  justify-center">
+          <div className="flex   flex-col  w-full  space-y-2">
+            <div className="flex  space-x-8  border-b  pb-4">
               {tabs.map((tab, index) => (
                 <button
                   key={index}
                   onClick={() => handleTabClick(index)}
                   className={`text-xl ${
-                    activeTab === index ? "font-bold" : ""
+                    activeTab === index ? "font-bold  text-red-400  shadow-lg  px-5  py-2  hover:opacity-75" : "text-gray-600  font-bold  hover:opacity-75"
                   }`}
                 >
                   {tab}
@@ -37,9 +37,9 @@ function MyAccount() {
               ))}
             </div>
 
-            <div className="tab-content w-full flex ">
+            <div className="tab-content  account-container  container  w-full  flex ">
               {activeTab === 0 ? (
-                <div className="w-full max-w-full p-4  rounded-lg ">
+                <div className=" w-full max-w-full p-4  rounded-lg ">
                   <PersonalInformation />
                 </div>
               ) : (

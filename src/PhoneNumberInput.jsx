@@ -67,11 +67,11 @@ const PhoneNumberInput = ({
   };
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex items-center border w-full h-10">
+    <div className="relative flex flex-col w-full">
+      <div className="relative flex items-center border w-full h-10">
         {/* 國碼與國家縮寫選單 */}
         <select
-          className="mr-2 border-none "
+          className="relative mr-2 border-none w-auto "
           value={selectedCode}
           onChange={(e) => handleCodeChange(e.target.value)}
         >
@@ -87,7 +87,7 @@ const PhoneNumberInput = ({
         {/* 電話號碼輸入框 */}
         <input
           type="tel"
-          className="pl-1 w-full h-full"
+          className="relative pl-1  w-full h-full"  
           placeholder="請輸入電話號碼"
           value={value}
           onChange={(e) => handleInputChange(e.target.value)}

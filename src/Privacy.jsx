@@ -7,8 +7,8 @@ function Privacy() {
     <>
       <TopAll/>
 
-      <div className="container  lg:flex  lg:items-center  lg:justify-center  bg-white">
-        <div className="lg:w-1/2 h-1000px  lg:p-20  p-10 text-lg">
+      <div className="product-text-container">
+        <div className="lg:w-1/2 w-full p-10  text-lg">
           <div className="flex items-center lg:justify-center justify-start pb-20 font-bold text-2xl">
             隱私政策
           </div>

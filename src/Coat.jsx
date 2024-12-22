@@ -41,7 +41,7 @@ function Coat() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>外套</span>
         </div>

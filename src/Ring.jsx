@@ -38,7 +38,7 @@ function Ring() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>戒指</span>
         </div>

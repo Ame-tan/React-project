@@ -18,13 +18,13 @@ import Ring from "./Ring";
 import Earring from "./Earring";
 import Necklace from "./Necklace";
 import Login from "./Login";  
-import ForgetPassword from "./ForgetPassword";
 import Register from "./Register";
 import Logout from "./Login";
 import MyAccount from "./MyAccount";
 import OrderManagement from "./OrderManagement";
 import ShopCar from "./ShopCar";
 import DetailedProducts from "./DetailedProducts";
+import MainLayout from "./MainLayout";
 
 const RoutesComponent = () => {
   return (
@@ -32,17 +32,14 @@ const RoutesComponent = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
 
+        <Route element={<MainLayout />}>
+
             <Route path="/Login" element={<Login />} />
-            <Route path="/ForgetPassword" element={<ForgetPassword />} />
             <Route path="/Register" element={<Register />} />
             <Route path="/Logout" element={<Logout />} />
             <Route path="/MyAccount" element={<MyAccount />} />
             <Route path="/MyAccount/?tab=orders" element={<OrderManagement />} />
             <Route path="/ShopCar" element={<ShopCar />} />
-            
-
-            <Route path="/products/:id" element={<DetailedProducts />} />
-
 
             <Route path="/Information" element={<Information />} />
                 <Route path="/ProductInformation" element={<ProductInformation />} />
@@ -52,6 +49,7 @@ const RoutesComponent = () => {
             <Route path="/HotThing" element={<HotThing />} />
 
             <Route path="/AllProducts" element={<AllProducts />} />  
+              <Route path="/products/:id" element={<DetailedProducts />} />
                 <Route path="/Clothes" element={<Clothes />} />    
                 <Route path="/Pants" element={<Pants />} /> 
                 <Route path="/Skirt" element={<Skirt />} /> 
@@ -64,7 +62,8 @@ const RoutesComponent = () => {
                 <Route path="/Necklace" element={<Necklace />} />
 
 
-            <Route path="/Privacy" element={<Privacy />} />                
+            <Route path="/Privacy" element={<Privacy />} />
+          </Route>
       </Routes>
     </Router>
   );

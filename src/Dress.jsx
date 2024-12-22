@@ -40,7 +40,7 @@ function Dress() {
   return (
     <>
       <TopAll />
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>洋裝</span>
         </div>

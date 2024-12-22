@@ -53,14 +53,12 @@ function MidPage() {
       <div className="ImageCarousel  container  bg-white  px-10  py-10">
         <ImageCarousel />
       </div>
-
       <div className="product-container">
-        <div className="product-toptext">
-          <div className="homepage-product-tag sm:mx-2 md:mx-2 ">
+
+          <div className="homepage-product-tag  mx-2  2xl:mx-32">
             <span className="md:font-bold pl-2">所有商品</span>
             <span className="md:font-light pl-2">All products</span>
           </div>
-        </div>
 
         <div className="product-grid-container">
           <div className="product-grid">

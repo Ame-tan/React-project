@@ -50,8 +50,8 @@ function AddressSelect({
 
   return (
     <div>
-      <div className="flex items-center font-semibold mt-10">
-        <span className="flex w-20 mr-5">國家</span>
+      <div className="account-info-container">
+        <span className="account-title-text">國家</span>
         <select
           className="border px-2 py-2 w-full"
           multiple={false}
@@ -75,8 +75,8 @@ function AddressSelect({
 
       {selectedCountry && (
         <>
-          <div className="flex items-center font-semibold mt-10">
-            <span className="flex w-20 mr-5">城市/縣</span>
+          <div className="account-info-container">
+            <span className="account-title-text">城市/縣</span>
             {selectedCountry === "台灣" ? (
               <select
                 multiple={false}
@@ -107,8 +107,8 @@ function AddressSelect({
             )}
           </div>
 
-          <div className="flex items-center font-semibold mt-10">
-            <span className="flex w-20 mr-5">地區</span>
+          <div className="account-info-container">
+            <span className="account-title-text">地區</span>
             {selectedCountry === "台灣" ? (
               <select
                 multiple={false}

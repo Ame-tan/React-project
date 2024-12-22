@@ -42,19 +42,11 @@ function ProductItem({ product, image }) {
             加入購物車
           </div>
         </button>
-        <div className="button-block-sm">
-    <button
-      onClick={handleOpenModal}
-      className="cart-button-sm"
-    >
-      加入購物車
-    </button>
-  </div>
       </div>
       <div className="relative group ">
         <Link to={`/products/${product.id}`}>
-          <div className="flex-wrap flex text-left text-lg font-bold text-gray-500 bg-opacity-70 
-                group-hover:text-gray-950 py-1">
+          <div className="line-clamp-2  text-left text-lg font-bold text-gray-500 bg-opacity-70 
+                group-hover:text-gray-950 py-1 ">
             {product.description}
           </div>
         

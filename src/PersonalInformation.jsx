@@ -46,7 +46,6 @@ function PersonalInformation() {
   const [phoneInputValue, setPhoneInputValue] = useState(""); // 純號碼輸入框的值
   const [receiverPhoneInputValue, setReceiverPhoneInputValue] = useState("");
 
-
   // 在應用啟動時將資料加載到 Redux 並存在本地快取中(localStorage)再獲取資料並同步到Redux，不用每次都向 Firebase 發送請求。
   useEffect(() => {
     const cachedData = localStorage.getItem(`memberData_${user.uid}`);
@@ -125,8 +124,8 @@ function PersonalInformation() {
           year: selectedYear || "",
           month: selectedMonth || "",
           day: selectedDay || "",
-          selectedCode: memberSelectedCode&&receiverSelectedCode||"",
-          countryAbbr: memberCountryAbbr&&receiverCountryAbbr||"",
+          selectedCode: (memberSelectedCode && receiverSelectedCode) || "",
+          countryAbbr: (memberCountryAbbr && receiverCountryAbbr) || "",
           phoneNumber: phoneInputValue || "",
           receiverName: editedData?.receiverName || "",
           receiverPhone: receiverPhoneInputValue || "",
@@ -175,13 +174,13 @@ function PersonalInformation() {
     }
     if (field === "phoneNumber") {
       setPhoneInputValue(value || "");
-      setMemberSelectedCode(memberSelectedCode||"");
+      setMemberSelectedCode(memberSelectedCode || "");
       setMemberCountryAbbr(memberCountryAbbr || "");
     }
     if (field === "receiverPhone") {
       setReceiverPhoneInputValue(value || "");
-      setReceiverSelectedCode(receiverSelectedCode||"");
-      setReceiverCountryAbbr(receiverCountryAbbr||"");
+      setReceiverSelectedCode(receiverSelectedCode || "");
+      setReceiverCountryAbbr(receiverCountryAbbr || "");
     }
     if (field === "year") {
       setSelectedYear(value || "");
@@ -196,31 +195,31 @@ function PersonalInformation() {
 
   return (
     <>
-      <div className="personal-info  flex flex-col justify-center h-20 p-4 max-w-60">
-        <h1 className="flex text-lg items-center space-x-16 w-auto">
+      <div className="personal-info  flex  flex-col  justify-center  h-20  p-4  max-w-60">
+        <h1 className="flex  text-lg  items-center  space-x-16  w-auto">
           {`你好${user?.email}`}
           <Link
             to="/"
             onClick={handleLogout}
-            className="text-red-500 hover:underline w-full cursor-pointer text-lg ml-6"
+            className="text-red-500  hover:underline  w-full  cursor-pointer  text-lg  ml-6"
           >
             登出
           </Link>
         </h1>
       </div>
-      <div className="p-4 bg-white rounded shadow-md w-full">
-        <div className="flex space-x-5">
-          <div className="border p-5 w-1/2 h-auto">
-            <h2 className="text-xl font-bold">會員資料</h2>
+      <div className="p-4  bg-white  rounded  shadow-md  w-full">
+        <div className="flex  lg:flex-row  flex-col  lg:space-x-5">
+          <div className="border  lg:p-5  lg:w-1/2  lg:h-auto  p-5">
+            <h2 className="text-xl  font-bold">會員資料</h2>
 
             <div className="mb-2">
-              <div className="flex items-center font-semibold mt-10">
-                <span className="flex w-20 mr-9">電子郵件</span>
+              <div className="account-info-container">
+                <span className="account-title-text">電子郵件</span>
                 <span className="border px-2 py-2 w-full">{user.email}</span>
               </div>
 
-              <div className="flex items-center h-5 font-semibold mt-10">
-                <span className="flex w-20 mr-9">手機號碼</span>
+              <div className="account-info-container">
+                <span className="account-title-text">手機號碼</span>
                 <PhoneNumberInput
                   selectedCode={memberSelectedCode}
                   setSelectedCode={(value) => setMemberSelectedCode(value)}
@@ -231,8 +230,8 @@ function PersonalInformation() {
                 />
               </div>
 
-              <div className="flex items-center font-semibold mt-10">
-                <span className="flex w-20 mr-9">生日日期(選填)</span>
+              <div className="account-info-container">
+                <span className="account-title-text">生日日期(選填)</span>
                 <div className="flex w-full">
                   <BirthdayDropdown
                     label="年"
@@ -264,10 +263,10 @@ function PersonalInformation() {
                 </div>
               </div>
 
-              <div className="flex items-center font-semibold mt-10">
-                <span className="flex w-20 mr-9">
+              <div className="account-info-container">
+                <span className="account-title-text">
                   備註
-                  <br />
+                  <div className="lg:after:block  hidden"><br /></div>
                   (選填)
                 </span>
                 <input
@@ -277,21 +276,14 @@ function PersonalInformation() {
                   onChange={(e) => handleInputChange("notes", e.target.value)}
                 />
               </div>
-
-              <div className="flex items-center font-semibold mt-10">
-                <span className="flex w-auto py-3 mr-9">密碼</span>
-                <a href="" className="ml-8 py-3 text-red-500 cursor-pointer">
-                  設定新的密碼
-                </a>
-              </div>
             </div>
           </div>
 
-          <div className="border p-5 w-1/2 h-auto">
+          <div className="border lg:p-5 lg:w-1/2 lg:h-auto p-5">
             <h2 className="text-xl font-bold">配送與付款資訊</h2>
             <div className="mb-2">
-              <div className="flex items-center font-semibold mt-10">
-                <span className="flex w-20 mr-5">收件人</span>
+              <div className="account-info-container">
+                <span className="account-title-text">收件人</span>
                 <input
                   className="border px-2 py-2 w-full"
                   type="text"
@@ -302,10 +294,10 @@ function PersonalInformation() {
                 />
               </div>
 
-              <div className="flex items-center font-semibold mt-10">
-                <span className="flex w-20 mr-5">
+              <div className="account-info-container">
+                <span className="account-title-text">
                   收件人
-                  <br />
+                  <div className="lg:after:block  hidden"><br /></div>
                   電話號碼
                 </span>
                 <PhoneNumberInput
@@ -334,8 +326,8 @@ function PersonalInformation() {
                 onChangeArea={(value) => handleInputChange("area", value)}
               />
 
-              <div className="flex items-center font-semibold mt-10">
-                <span className="flex w-20 mr-5">地址</span>
+              <div className="account-info-container">
+                <span className="account-title-text">地址</span>
                 <input
                   className="border px-2 py-2 w-full"
                   type="text"
@@ -345,20 +337,13 @@ function PersonalInformation() {
                   }
                 />
               </div>
-
-              <div className="flex items-center font-semibold   mt-10">
-                <span className="flex w-auto py-3 mr-10">信用卡</span>
-                <a href="" className=" my-3 text-red-500 cursor-pointer">
-                  新增信用卡
-                </a>
-              </div>
             </div>
           </div>
         </div>
-        <div className="flex p-4 bg-white w-full items-end justify-end ">
+        <div className="flex py-4 bg-white w-full items-end justify-end ">
           <button
             onClick={handleSaveChanges}
-            className="text-white  bg-red-400 px-5 rounded-sm  py-2  justify-end items-end"
+            className="text-white  bg-red-400 px-5 rounded-sm  w-full py-2 hover:bg-red-300 "
           >
             儲存變更
           </button>

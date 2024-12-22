@@ -54,15 +54,15 @@ function Register() {
   return (
     <>
       <TopAll />
-      <div className="flex  justify-center  items-center  min-h-screen  px-4  py-12  sm:px-6  lg:px-8">
-        <div className="w-full  max-w-md ">
+      <div className="login-member-container">
+        <div className="container  max-w-md  p-5">
           <div className="border  border-gray-300  rounded-lg  bg-white  p-8  shadow-md">
 
-            <h2 className="text-center  text-2xl  font-bold  tracking-tight  text-gray-900  sm:text-3xl">
+            <h2 className="text-center  text-2xl  font-bold   text-gray-900  sm:text-3xl">
               註冊
             </h2>
 
-              <form onSubmit={handleSubmit} className="mt-8  space-y-6">
+              <form onSubmit={handleSubmit} className="mt-8  space-y-8">
 
                   <div>
                     <label

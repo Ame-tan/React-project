@@ -41,7 +41,7 @@ function Skirt() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>裙子</span>
         </div>

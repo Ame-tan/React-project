@@ -37,7 +37,7 @@ function Necklace() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>項鍊</span>
         </div>

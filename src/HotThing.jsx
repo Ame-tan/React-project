@@ -43,7 +43,7 @@ function HotThing() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>熱銷商品</span>
         </div>

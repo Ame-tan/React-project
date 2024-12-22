@@ -11,7 +11,7 @@ function EndPage() {
 
   <div className="end-container ">
     {/* 左 */}
-    <div className="flex  flex-col  justify-center  items-center  md:w-2/3">
+    <div className="flex  flex-col  justify-center  items-center  md:pt-14 md:pb-2 md:w-2/3">
       
       <h1 className="text-lg  text-gray-700  font-bold">購物指南</h1>
       <Link to="/ProductInformation" onClick={scrollToTop} className="sm:pt-9  pt-9  text-base text-gray-700">

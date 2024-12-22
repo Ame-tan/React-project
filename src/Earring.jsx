@@ -38,7 +38,7 @@ function Earring() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>耳環</span>
         </div>

@@ -37,7 +37,7 @@ function Accessories() {
     <>
       <TopAll />
 
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>飾品</span>
         </div>

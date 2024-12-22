@@ -8,7 +8,7 @@ function ProductInformation() {
       <TopAll />
 
       <div className="product-text-container">
-        <div className="lg:w-1/2 h-auto  lg:p-20  p-10  text-lg ">
+        <div className="lg:w-1/2  p-10  text-lg ">
           // 商 品 資 訊 //
           <br />
           <br />

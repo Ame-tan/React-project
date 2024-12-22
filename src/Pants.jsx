@@ -40,7 +40,7 @@ function Pants() {
   return (
     <>
       <TopAll />
-      <div className="product-toptext-container">
+      <div className="product-container">
         <div className="product-toptext">
           <span>褲子</span>
         </div>
