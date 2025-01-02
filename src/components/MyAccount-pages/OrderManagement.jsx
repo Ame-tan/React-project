@@ -113,7 +113,7 @@ const OrderManagement = () => {
                               <br />
                               {item.quantity}
                             </p>
-                            <p className="text-center w-20">
+                            <p className="text-center md:w-20">
                               <span className="md:flex font-bold">價格</span>
                               <br /> NT$
                               {(product.money * item.quantity).toLocaleString()}
