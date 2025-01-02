@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth"; // 引入 Firebase 的身份驗證模組
-import AuthContext from "./contexts";
+import AuthContext from "./AuthContext";
 import RoutesComponent from "./RoutesComponent";
 import { Provider } from "react-redux";
 import { store } from "./store"; // 引入 store

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth } from "./firebase";
-import AuthContext from "./contexts.js";
+import AuthContext from "./AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { setAuthToken } from "./utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,59 @@ function PersonalInformation() {
   const memberData = useSelector((state) => state.member.data);
   const [editedData, setEditedData] = useState(memberData || {});
   const isSaving = useSelector((state) => state.member.isSaving);
-  const [isDataFetched, setIsDataFetched] = useState(false);
+  const [isDataFetched] = useState(false);
+
+  const [errors, setErrors] = useState({});
+
+  // 檢查必填欄位的函數
+  const validateFields = () => {
+    const newErrors = {};
+
+    // 必填欄位清單
+    if (!selectedCountry) newErrors.country = "此欄位為必填";
+    if (!selectedCity) newErrors.city = "此欄位為必填";
+    if (!selectedArea) newErrors.area = "此欄位為必填";
+    if (!phoneInputValue) newErrors.phoneNumber = "此欄位為必填";
+    if (!receiverPhoneInputValue) newErrors.receiverPhone = "此欄位為必填";
+    if (!editedData?.addressStreet) newErrors.addressStreet = "此欄位為必填";
+    if (!editedData?.receiverName) newErrors.receiverName = "此欄位為必填";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // 沒有錯誤則返回 true
+  };
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const countries = [
+    { name: "台灣", code: "+886", abbr: "TW", regex: /^09\d{8}$/ },
+    { name: "香港", code: "+852", abbr: "HK", regex: /^[5689]\d{7}$/ },
+    { name: "澳門", code: "+853", abbr: "MO", regex: /^6\d{7}$/ },
+    { name: "中國", code: "+86", abbr: "CN", regex: /^1[3-9]\d{9}$/ },
+    // 可以根據需要添加更多國家及其驗證正則表達式
+  ];
+// 驗證手機號碼通用函數
+const validatePhone = (phone, code, type) => {
+  const country = countries.find((c) => c.code === code);
+  if (!country) {
+    setErrorMessage(`${type} 無效的國碼，請重新選擇`);
+    return false;
+  }
+  if (!country.regex.test(phone)) {
+    setErrorMessage(`${type} 手機號碼無效或未填寫，請重新確認`);
+    return false;
+  }
+  setErrorMessage(""); // 清空錯誤訊息
+  return true;
+};
+
+// 用於驗證會員手機號碼
+const validatePhoneNumber = (phone) => {
+  return validatePhone(phone, memberSelectedCode, "會員");
+};
+
+// 用於驗證收件人手機號碼
+const validateReceiverPhone = (phone) => {
+  return validatePhone(phone, receiverSelectedCode, "收件人");
+};
 
   // 手機號碼
   const [memberSelectedCode, setMemberSelectedCode] = useState("");
@@ -50,10 +102,10 @@ function PersonalInformation() {
   useEffect(() => {
     const cachedData = localStorage.getItem(`memberData_${user.uid}`);
     if (cachedData) {
-      dispatch(loadMemberData(JSON.parse(cachedData)));
+      dispatch(loadMemberData(JSON.parse(cachedData))); // 如果有快取資料，從 localStorage 讀取
     } else if (user.uid) {
       dispatch(loadMemberData(user.uid)).then((data) => {
-        localStorage.setItem(`memberData_${user.uid}`, JSON.stringify(data));
+        localStorage.setItem(`memberData_${user.uid}`, JSON.stringify(data)); // 儲存到 localStorage
       });
     }
   }, [user, dispatch]);
@@ -87,11 +139,11 @@ function PersonalInformation() {
       setCityInputValue(memberData.city || "");
       setAreaInputValue(memberData.area || "");
 
-      setMemberSelectedCode(memberData.selectedCode || "");
+      setMemberSelectedCode(memberData.memberSelectedCode || "");
       setMemberCountryAbbr(memberData.countryAbbr || "");
       setPhoneInputValue(memberData.phoneNumber || "");
 
-      setReceiverSelectedCode(memberData.selectedCode || "");
+      setReceiverSelectedCode(memberData.receiverSelectedCode || "");
       setReceiverCountryAbbr(memberData.countryAbbr || "");
       setReceiverPhoneInputValue(memberData.receiverPhone || "");
 
@@ -99,15 +151,9 @@ function PersonalInformation() {
       setSelectedMonth(memberData.month || "");
       setSelectedDay(memberData.day || "");
 
-      setIsDataFetched(true);
       setEditedData(memberData);
     }
   }, [user, memberData]);
-
-  // 更新資料的函數
-  const updateData = (updatedData) => {
-    dispatch(setMemberData(updatedData)); // 更新資料
-  };
 
   // 更新儲存的資料
   const handleSaveChanges = async () => {
@@ -115,7 +161,32 @@ function PersonalInformation() {
       console.log("正在保存資料，請稍候...");
       return;
     }
-    if (user && editedData) {
+    if (!validateFields()) {
+      console.log("有未填寫的必填欄位！");
+      return;
+    }
+
+  if (
+    !validatePhoneNumber(phoneInputValue) || 
+    !validateReceiverPhone(receiverPhoneInputValue)
+  ) {
+    alert("請檢查手機號碼格式");
+    return;
+  }
+    // 檢查手機號碼國碼是否一致
+    if (memberSelectedCode !== receiverSelectedCode) {
+      alert("會員和收件人的國碼必須相同！");
+      return;
+    }
+    // 檢查 user 是否已加載
+    if (!user || !user.uid) {
+      console.log("用戶尚未登入，無法儲存資料！");
+      alert("用戶尚未登入，無法儲存資料！");
+      return;
+    }
+    // 檢查手機號碼格式
+
+    if (editedData) {
       try {
         const updatedData = {
           country: selectedCountry || "",
@@ -124,7 +195,8 @@ function PersonalInformation() {
           year: selectedYear || "",
           month: selectedMonth || "",
           day: selectedDay || "",
-          selectedCode: (memberSelectedCode && receiverSelectedCode) || "",
+          memberSelectedCode: memberSelectedCode || "",
+          receiverSelectedCode: receiverSelectedCode || "",
           countryAbbr: (memberCountryAbbr && receiverCountryAbbr) || "",
           phoneNumber: phoneInputValue || "",
           receiverName: editedData?.receiverName || "",
@@ -145,8 +217,13 @@ function PersonalInformation() {
           await setDoc(userRef, updatedData);
           console.log("資料創建成功");
         }
-        updateData(updatedData); // 使用 updateData 更新 Redux
-        setEditedData(updatedData); // 更新本地的 editedData
+        // 儲存至 localStorage
+        localStorage.setItem(
+          `memberData_${user.uid}`,
+          JSON.stringify(updatedData)
+        );
+        dispatch(setMemberData(updatedData));
+        setEditedData(updatedData); // 更新本地狀態以即時反映頁面
         alert("資料已成功儲存！");
       } catch (error) {
         console.error("儲存變更失敗：", error);
@@ -160,6 +237,11 @@ function PersonalInformation() {
       ...prevData,
       [field]: value || "",
     }));
+    setErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+      if (value.trim() !== "") delete updatedErrors[field];
+      return updatedErrors;
+    });
 
     if (field === "country") {
       setSelectedCountry(value || "");
@@ -176,11 +258,13 @@ function PersonalInformation() {
       setPhoneInputValue(value || "");
       setMemberSelectedCode(memberSelectedCode || "");
       setMemberCountryAbbr(memberCountryAbbr || "");
+      setErrors((prevErrors) => ({ ...prevErrors, phoneNumber: "" })); // 清除錯誤
     }
     if (field === "receiverPhone") {
       setReceiverPhoneInputValue(value || "");
       setReceiverSelectedCode(receiverSelectedCode || "");
       setReceiverCountryAbbr(receiverCountryAbbr || "");
+      setErrors((prevErrors) => ({ ...prevErrors, receiverPhone: "" })); // 清除錯誤
     }
     if (field === "year") {
       setSelectedYear(value || "");
@@ -228,6 +312,11 @@ function PersonalInformation() {
                   value={phoneInputValue}
                   onChange={(value) => handleInputChange("phoneNumber", value)}
                 />
+                {errors?.phoneNumber && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.phoneNumber}
+                  </p>
+                )}
               </div>
 
               <div className="account-info-container">
@@ -266,7 +355,9 @@ function PersonalInformation() {
               <div className="account-info-container">
                 <span className="account-title-text">
                   備註
-                  <div className="lg:after:block  hidden"><br /></div>
+                  <div className="lg:after:block  hidden">
+                    <br />
+                  </div>
                   (選填)
                 </span>
                 <input
@@ -285,19 +376,28 @@ function PersonalInformation() {
               <div className="account-info-container">
                 <span className="account-title-text">收件人</span>
                 <input
-                  className="border px-2 py-2 w-full"
+                  className={`border px-2 py-2 w-full ${
+                    errors.receiverName ? "border-red-500" : "border-gray-300"
+                  }`}
                   type="text"
                   value={editedData?.receiverName || ""}
                   onChange={(e) =>
                     handleInputChange("receiverName", e.target.value)
                   }
                 />
+                {errors.receiverName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.receiverName}
+                  </p>
+                )}
               </div>
 
               <div className="account-info-container">
                 <span className="account-title-text">
                   收件人
-                  <div className="lg:after:block  hidden"><br /></div>
+                  <div className="lg:after:block  hidden">
+                    <br />
+                  </div>
                   電話號碼
                 </span>
                 <PhoneNumberInput
@@ -310,6 +410,11 @@ function PersonalInformation() {
                     handleInputChange("receiverPhone", value)
                   }
                 />
+                {errors?.receiverPhone && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.receiverPhone}
+                  </p>
+                )}
               </div>
               <AddressSelect
                 selectedCountry={selectedCountry}
@@ -324,18 +429,26 @@ function PersonalInformation() {
                 areaValue={areaInputvalue}
                 onChangeCity={(value) => handleInputChange("city", value)}
                 onChangeArea={(value) => handleInputChange("area", value)}
+                errors={errors}
               />
 
               <div className="account-info-container">
                 <span className="account-title-text">地址</span>
                 <input
-                  className="border px-2 py-2 w-full"
+                  className={`border px-2 py-2 w-full ${
+                    errors.addressStreet ? "border-red-500" : "border-gray-300"
+                  }`}
                   type="text"
                   value={editedData?.addressStreet || ""}
                   onChange={(e) =>
                     handleInputChange("addressStreet", e.target.value)
                   }
                 />
+                {errors.addressStreet && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.addressStreet}
+                  </p>
+                )}
               </div>
             </div>
           </div>

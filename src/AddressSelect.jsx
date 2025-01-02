@@ -12,10 +12,9 @@ function AddressSelect({
   areaValue,
   onChangeCity,
   onChangeArea,
+  errors, // 新增的錯誤訊息
 }) {
   const [countries, setCountries] = useState([]);
-
-
 
   // 請求國家資料
   useEffect(() => {
@@ -23,7 +22,11 @@ function AddressSelect({
       try {
         const response = await axios.get("http://localhost:4000/countries");
         console.log("國家資料：", response.data);
-        setCountries(response.data || []);
+        if (Array.isArray(response.data)) {
+          setCountries(response.data);
+        } else {
+          console.error("獲取的資料格式不正確", response.data);
+        }
       } catch (error) {
         console.error("獲取國家資料失敗：", error);
         alert("無法獲取國家資料，請稍後重試。");
@@ -31,7 +34,6 @@ function AddressSelect({
     };
     fetchCountries();
   }, []);
-
 
   const cities = useMemo(() => {
     console.log("選擇的國家:", selectedCountry);
@@ -71,6 +73,7 @@ function AddressSelect({
             </option>
           ))}
         </select>
+        {errors?.country && <p style={{ color: "red" }}>{errors.country}</p>}
       </div>
 
       {selectedCountry && (
@@ -99,11 +102,16 @@ function AddressSelect({
             ) : (
               <input
                 type="text"
-                className="border px-2 py-2 w-full"
+                className={`border px-2 py-2 w-full ${
+                  errors.city ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="請輸入城市"
                 value={cityValue}
                 onChange={(e) => onChangeCity(e.target.value)}
               />
+            )}
+            {errors?.city && (
+              <p className="text-red-500 text-sm mt-1">{errors.city}</p>
             )}
           </div>
 
@@ -113,7 +121,7 @@ function AddressSelect({
               <select
                 multiple={false}
                 className="border px-2 py-2 w-full"
-                value={selectedArea||""}
+                value={selectedArea || ""}
                 onChange={(e) => setSelectedArea(e.target.value)}
                 disabled={!selectedCity} // 當選擇城市之前，地區選項是禁用的
               >
@@ -129,11 +137,16 @@ function AddressSelect({
             ) : (
               <input
                 type="text"
-                className="border px-2 py-2 w-full"
+                className={`border px-2 py-2 w-full ${
+                  errors.area ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="請輸入地區"
                 value={areaValue}
                 onChange={(e) => onChangeArea(e.target.value)}
               />
+            )}
+            {errors?.area && (
+              <p className="text-red-500 text-sm mt-1">{errors.area}</p>
             )}
           </div>
         </>

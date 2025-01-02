@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"; // 引入 useDispatch
 import $ from "jquery";
 import TopAll from "./TopAll";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import AuthContext from "./contexts";
+import AuthContext from "./AuthContext";
 import AddToCartAlert from "./AddToCartAlert"; // 引入 AddToCartAlert 組件
 import { useSelector } from "react-redux";
 import EndPage from "./EndPage";
@@ -159,10 +159,10 @@ function DetailedProducts() {
   return (
     <>
       <TopAll />
-      <div className="detailed-product-container container">
+      <div className="detailed-product-container">
         <div className=" lg:flex w-auto h-full lg:items-start items-center justify-center">
           {/* 主圖區 */}
-          <div className="flex-col  container lg:flex lg:w-96 lg:h-full w-full px-5 ">
+          <div className="flex-col  container lg:flex lg:w-96 lg:h-full w-full px-2">
             {images[nowImage] && (
               <img
                 key={images[nowImage].id}

@@ -7,6 +7,7 @@ const PhoneNumberInput = ({
   setCountryAbbr,
   value,
   onChange,
+  errors,
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -18,6 +19,7 @@ const PhoneNumberInput = ({
     // 可以根據需要添加更多國家及其驗證正則表達式
   ];
 
+  
   const validatePhoneNumber = (phone, code) => {
     const country = countries.find((c) => c.code === code);
     if (!country) {
@@ -38,16 +40,16 @@ const PhoneNumberInput = ({
     );
     setSelectedCode(selectedCountry?.code || ""); // 更新國碼
     setCountryAbbr(selectedCountry?.abbr || ""); // 更新國家縮寫
-    validatePhoneNumber(value, newCode); // 驗證當前電話號碼
-    if (!selectedCountry) {
+
+    // 不立即驗證，等待狀態更新後在輸入框中進行驗證
+    if (selectedCountry) {
+      setErrorMessage(""); // 清空錯誤訊息
+    } else {
       setErrorMessage("無效的國碼，請重新選擇");
-      return;
     }
-    validatePhoneNumber(value, newCode);
   };
 
-  const handleInputChange = (phone,selectedCode) => {
-    // 過濾非數字字符
+  const handleInputChange = (phone) => {
     const numericPhone = phone.replace(/\D/g, "");
     onChange(numericPhone);
 
@@ -58,12 +60,7 @@ const PhoneNumberInput = ({
     }
 
     // 即時驗證輸入的電話號碼
-    const isValid = validatePhoneNumber(numericPhone, selectedCode);
-    if (!isValid) {
-      setErrorMessage("手機號碼無效或未填寫，請重新確認");
-    } else {
-      setErrorMessage(""); // 如果驗證正確，清除錯誤訊息
-    }
+    validatePhoneNumber(numericPhone, selectedCode);
   };
 
   return (
@@ -75,7 +72,9 @@ const PhoneNumberInput = ({
           value={selectedCode}
           onChange={(e) => handleCodeChange(e.target.value)}
         >
-          <option value="">請選擇</option>
+          <option disabled value="">
+            請選擇
+          </option>
           {countries.map((country) => (
             <option key={country.abbr} value={country.code}>
               {country.name}
@@ -87,7 +86,7 @@ const PhoneNumberInput = ({
         {/* 電話號碼輸入框 */}
         <input
           type="tel"
-          className="relative pl-1  w-full h-full"  
+          className="relative pl-1  w-full h-full"
           placeholder="請輸入電話號碼"
           value={value}
           onChange={(e) => handleInputChange(e.target.value)}

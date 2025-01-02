@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "./cartSlice"; // 引入保存購物車到 Firestore 的函數
 import { db } from "./firebase"; // 確保正確的導入路徑
 import { doc, setDoc } from "firebase/firestore";
-import AuthContext from "./contexts";
+import AuthContext from "./AuthContext";
 
 function TopAll() {
   const dispatch = useDispatch(); // 使用 useDispatch
@@ -104,25 +104,21 @@ function TopAll() {
 
         <NavColumn />
 
-        <div className="fixed top-0 left-0 w-full bg-red-50 z-50 py-2 px-1">
-          <div className="flex items-center justify-start w-full max-w-full space-x-4 md:hidden">
-            <NavColumn className="<nav>" />
-
-            <div className="icon ">
-              <Link to="/">
-                <img
-                  src={icon}
-                  className="h-14  z-50 w-auto max-w-28"
-                  alt="Logo"
-                />
+        <div className="sticky  top-0 left-0 w-full bg-red-50 z-50 py-2 px-1 md:hidden">
+          <NavColumn />
+          <div className="icon-container">
+            <div className="content">
+              <Link to="/" className="logo">
+                <img src={icon} className="h-12 w-auto " alt="Logo" />
               </Link>
             </div>
-
+          </div>
+          <div className="actions">
             {!auth.currentUser ? (
               <Link to="/Login">
-                <div className="md:px-4 container min-w-12 h-10 text-sm md:text-base md:border-gray-400 md:border md:rounded-md md:text-gray-800 md:flex md:items-center md:space-x-2 hidden">
-                  <UserIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
-                  <span className="xl:block hidden">登入會員</span>
+                <div className="px-4 min-w-12 h-10 text-sm border-gray-400 border rounded-md text-gray-800 flex items-center space-x-2">
+                  <UserIcon className="w-4 h-4 text-gray-800" />
+                  <span className="hidden xl:block">登入會員</span>
                 </div>
               </Link>
             ) : (
@@ -130,13 +126,13 @@ function TopAll() {
                 <Link to="/">
                   <div
                     onClick={() => handleLogout(location, navigate)}
-                    className="md:px-4 min-w-12 h-10 text-sm md:text-base md:border-gray-400 md:border md:rounded-md md:text-gray-800 md:flex md:items-center md:space-x-2 hidden"
+                    className="px-4 min-w-12 h-10 text-sm border-gray-400 border rounded-md text-gray-800 flex items-center space-x-2 "
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="w-4 h-4 md:w-5 md:h-5 text-gray-800 md:block hidden"
+                      className="w-4 h-4 text-gray-800"
                     >
                       <path
                         fillRule="evenodd"
@@ -144,14 +140,14 @@ function TopAll() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="xl:block hidden">登出</span>
+                    <span className="hidden xl:block">登出</span>
                   </div>
                 </Link>
 
                 <Link to="/MyAccount">
-                  <div className="px-4 min-w-12 h-10 text-sm md:text-base border-gray-400 border rounded-md text-gray-800 p-2 flex items-center space-x-2">
-                    <UserCircleIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
-                    <span className="xl:block hidden">我的帳戶</span>
+                  <div className="px-4 min-w-12 h-10 text-sm border-gray-400 border rounded-md text-gray-800 flex items-center space-x-2">
+                    <UserCircleIcon className="w-4 h-4 text-gray-800" />
+                    <span className="hidden xl:block">我的帳戶</span>
                   </div>
                 </Link>
               </>
@@ -159,19 +155,19 @@ function TopAll() {
 
             {/* 購物車 */}
             <Link to="/ShopCar">
-              <div className="px-4 min-w-12 h-10 text-sm md:text-base border-gray-400 border rounded-md text-gray-800 p-2 flex items-center space-x-2">
-                <ShoppingCartIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
-                <span className="xl:block hidden">購物車</span>
+              <div className="px-4 min-w-12 h-10 text-sm border-gray-400 border rounded-md text-gray-800 flex items-center space-x-2">
+                <ShoppingCartIcon className="w-4 h-4 text-gray-800" />
+                <span className="hidden xl:block">購物車</span>
               </div>
             </Link>
 
             {/* 聯絡我們 */}
             <button
               onClick={() => setIsOpen(true)}
-              className="px-4 min-w-12 h-10 text-sm md:text-base border-gray-400 border rounded-md text-gray-800 p-2 flex items-center space-x-2"
+              className="px-4 min-w-12 h-10 text-sm border-gray-400 border rounded-md text-gray-800 flex items-center space-x-2"
             >
-              <ChatIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-800" />
-              <span className="xl:block hidden">聯絡我們</span>
+              <ChatIcon className="w-4 h-4 text-gray-800" />
+              <span className="hidden xl:block">聯絡我們</span>
             </button>
           </div>
         </div>
@@ -243,6 +239,7 @@ function TopAll() {
           </button>
         </div>
       </div>
+
       {isOpen && (
         <div
           onClick={handleOverlayClick}

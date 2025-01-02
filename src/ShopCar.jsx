@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TopAll from "./TopAll";
 import { Link, useNavigate } from "react-router-dom";
+import { XIcon } from "@heroicons/react/solid";
 import ProgressBar from "./ProgressBar";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -25,27 +26,31 @@ const ProductItem = ({ product, cartItem, onRemove, handleQuantityChange }) => {
   const subtotal = price * quantity;
 
   return (
-    <div className="flex flex-col md:flex-row justify-between  items-center px-6 py-10 border-b">
-      <Link to={`/products/${product.id}`} className="mb-4 md:mb-0">
+    <div className="shopcar-product-information-container">
+      <Link to={`/products/${product.id}`}>
         <img
           src={product.imagePath}
           alt={product.description}
-          className="w-auto h-40 object-cover"
+          className="shopcar-img"
         />
       </Link>
-      <div className="flex-col cursor-auto w-44 items-center justify-center pt-2">
-        <div className="flex w-50">{product.description}</div>
+      <div className="shopcar-product-information">
+        <div>{product.description}</div>
         {/* category 不是 "飾品" 才顯示尺寸資訊 */}
-        {product.category !== "飾品" && <div>尺寸： {size}</div>}
+        {product.category !== "飾品" && (
+          <div className="pt-2">尺寸： {size}</div>
+        )}
         {/* 只有id:"12"需要顯示顏色資訊 */}
         {product.id === "12" && <div>顏色： {color}</div>}
-        <div className="font-bold">{goods}</div>
+        <div className=" font-bold pt-2 underline">{goods}</div>
       </div>
-      <div className="flex pr-4">NT${price ? price.toLocaleString() : "0"}</div>
+      <div className="shopcar-price">
+        NT${price ? price.toLocaleString() : "0"}
+      </div>
 
-      <div className="flex items-center">
+      <div className="shopcar-quantity-container">
         <button
-          className="border rounded-md px-2 py-2 bg-gray-200 hover:bg-gray-300 "
+          className="shopcar-quantity-button"
           onClick={() =>
             handleQuantityChange(
               cartItem.productId,
@@ -60,12 +65,10 @@ const ProductItem = ({ product, cartItem, onRemove, handleQuantityChange }) => {
           -
         </button>
 
-        <span className="border rounded-md p-2 w-16 text-center mx-2">
-          {quantity}
-        </span>
+        <span className="shopcar-quantity-input">{quantity}</span>
 
         <button
-          className="border rounded-md px-2 py-2 bg-gray-200 hover:bg-gray-300 "
+          className="shopcar-quantity-button"
           onClick={() =>
             handleQuantityChange(
               cartItem.productId,
@@ -81,13 +84,57 @@ const ProductItem = ({ product, cartItem, onRemove, handleQuantityChange }) => {
         </button>
       </div>
 
-      <div className="flex m-2">NT${subtotal.toLocaleString()}</div>
+      <div className="shopcar-subtotal">NT${subtotal.toLocaleString()}</div>
+
       <button
+        className="shopcar-delete-button"
         onClick={() => onRemove(product.id, size, color, goods)}
-        className="flex m-14"
       >
-        刪除
+        <span className="lg:flex hidden">刪除</span>
+        <XIcon className="lg:hidden" />
       </button>
+    </div>
+  );
+};
+
+const CheckProductItem = ({ product, cartItem }) => {
+  if (!product || !cartItem) {
+    return <div>產品加載失敗</div>;
+  }
+  const { quantity = 1, size, color, goods, price } = cartItem;
+  const subtotal = price * quantity;
+
+  return (
+    <div className="shopcar-product-information-container">
+      <Link to={`/products/${product.id}`}>
+        <img
+          src={product.imagePath}
+          alt={product.description}
+          className="shopcar-img"
+        />
+      </Link>
+      <div className="shopcar-product-information">
+        <div>{product.description}</div>
+        {/* category 不是 "飾品" 才顯示尺寸資訊 */}
+        {product.category !== "飾品" && (
+          <div className="pt-2">尺寸： {size}</div>
+        )}
+        {/* 只有id:"12"需要顯示顏色資訊 */}
+        {product.color.length > 0 && <span>顏色：{color}</span>}
+        <div className=" font-bold pt-2 underline">{goods}</div>
+      </div>
+      <div className="shopcar-price">
+        NT${price ? price.toLocaleString() : "0"}
+      </div>
+
+      <div className="lg:flex  lg:relative  lg:w-12  lg:pt-0  pt-10 hidden">
+        <span className="shopcar-quantity-input">{quantity}</span>
+      </div>
+      <div className="flex  relative  w-30 text-lg     pt-10 lg:hidden ">
+        <span className="shopcar-quantity-input">數量：{quantity}</span>
+      </div>
+
+      <div className="lg:w-20  lg:pt-0  pt-5  lg:text-base  text-lg">NT${subtotal.toLocaleString()}</div>
     </div>
   );
 };
@@ -188,62 +235,49 @@ function ShopCar() {
     }, 3000); // 3秒後跳轉
   };
   const handleToPay = async () => {
-      if (cartItems.length === 0) {
-        alert("購物車不得為空！");
-        return;
-      }
-      nextStep();
-    };
+    if (cartItems.length === 0) {
+      alert("購物車不得為空！");
+      return;
+    }
+    nextStep();
+  };
 
   const nextStep = () => {
-      if (currentStep < 3) {
-        setCurrentStep(currentStep + 1);
-      }
-    };
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
 
   return (
     <>
       <TopAll />
-      <div className="relative z-0 bg-white w-full min-h-screen p-4 md:p-11 flex flex-col items-center">
-        <div className="w-full h-32 flex justify-center items-center text-amber-950 text-xl">
+      <div className="relative z-0 bg-white w-full container min-h-screen p-4 md:p-2 flex flex-col items-center">
+        <div className="w-full container h-32 flex justify-center items-center text-amber-950 text-xl">
           <ProgressBar currentStep={currentStep} />
         </div>
-        <div className="flex w-full mt-10 justify-center">
-          <div className="flex flex-col w-full lg:md:w-2/3 space-y-10">
+        <div className="shopcar-container">
+          <div className="flex container flex-col w-full space-y-10">
             {currentStep === 1 && (
               <>
-                <div className="flex flex-col lg:justify-center lg:h-20 h-24   border bg-red-50 rounded lg:p-4">
-                  <h1 className="lg:flex items-center text-lg">
+                <div className="shopcar-loginmember-container">
+                  <h1 className="shopcar-loginmember-text">
                     已經是會員？登入後可以更方便管理訂單！
-                    <Link
-                      to="/Register"
-                      className="ml-auto mr-5 px-4 py-2 bg-black text-white rounded font-bold"
-                    >
+                    <Link to="/Register" className="shopcar-loginmember-button">
                       加入會員
                     </Link>
                   </h1>
                 </div>
 
-                <div className="flex flex-col h-auto w-full justify-between border bg-gray-50 rounded p-4">
-                  <div className="flex flex-col md:flex-row justify-between items-center py-2 px-16 border-b ">
-                    <span className="flex w-full md:w-auto text-center">
-                      商品圖片
-                    </span>
-                    <span className="flex w-full md:w-auto text-center">
+                <div className="shopcar-content-container">
+                  <div className="shopcar-title-container">
+                    <span className="flex  w-44">商品圖片</span>
+                    <span className="flex  w-48">
                       商品名稱&尺寸
                     </span>
-                    <span className="flex w-full md:w-auto text-center">
-                      單價
-                    </span>
-                    <span className="flex w-full md:w-auto text-center">
-                      數量
-                    </span>
-                    <span className="flex w-full md:w-auto text-center">
-                      小計
-                    </span>
-                    <span className="flex w-full md:w-auto text-center">
-                      刪除按鈕
-                    </span>
+                    <span className="flex  w-28">單價</span>
+                    <span className="flex  w-32">數量</span>
+                    <span className="flex  w-14">小計</span>
+                    <span className="flex  w-16">刪除按鈕</span>
                   </div>
 
                   {cartItems.length > 0 ? (
@@ -267,7 +301,7 @@ function ShopCar() {
                       );
                     })
                   ) : (
-                    <div className="flex flex-grow justify-center items-center py-10">
+                    <div className="flex flex-grow  justify-center items-center py-10">
                       您的購物車是空的。
                     </div>
                   )}
@@ -300,61 +334,40 @@ function ShopCar() {
               <>
                 <div className="flex flex-col justify-center h-auto border bg-gray-50 rounded p-10">
                   <h2 className="text-lg font-bold mb-4">訂單確認</h2>
-                  <div className="flex flex-col h-auto w-full justify-between border bg-white rounded p-10">
-                    <div className="flex flex-row justify-between items-center py-2 px-4 border-b">
-                      <span className="flex w-full md:w-auto text-center">
-                        商品資訊
+                  <div className="shopcar-content-container">
+                    <div className="shopcar-title-container">
+                      <span className="flex w-52">商品圖片</span>
+                      <span className="flex w-56">
+                        商品名稱&尺寸
                       </span>
-                      <span className="flex w-full md:w-auto text-center pl-32">
-                        單價
-                      </span>
-                      <span className="flex w-full md:w-auto text-center pr-12">
-                        數量
-                      </span>
-                      <span className="flex w-full md:w-auto text-center">
-                        小計
-                      </span>
+                      <span className="flex  w-28">單價</span>
+                      <span className="flex  w-28">數量</span>
+                      <span className="flex  w-8">小計</span>
                     </div>
 
-                    {/* 顯示購物車中的每項商品 */}
-                    {cartItems.map((cartItem) => {
-                      const product = products.find(
-                        (product) => product.id === cartItem.productId
-                      );
+                    {cartItems.length > 0 ? (
+                      cartItems.map((cartItem) => {
+                        const product = products.find(
+                          (product) => product.id === cartItem.productId
+                        );
 
-                      if (!product) return null;
+                        const productImage = firstImages[cartItem.productId]; // 使用獲取到的第一張圖片
 
-                      const subtotal = cartItem.price * cartItem.quantity; // 計算小計
-
-                      return (
-                        <div
-                          key={`${cartItem.productId}-${cartItem.size || []}-${
-                            cartItem.goods || []
-                          }-${cartItem.color || []}`}
-                          className="flex flex-row justify-between items-center py-2 px-4 border-b"
-                        >
-                          <div className="w-full text-start">
-                            {product.description}
-                            {product.category !== "飾品" && cartItem.size
-                              ? ` (${cartItem.size}-${cartItem.goods})`
-                              : `(${cartItem.goods})`}
-                            {product.id === "12" && (
-                              <div>-{cartItem.color}-</div>
-                            )}
-                          </div>
-                          <div className="w-7/12 text-center">
-                            NT$
-                            {cartItem.price.toLocaleString()}
-                          </div>
-                          <div className="w-11/12 text-center">
-                            {cartItem.quantity}
-                          </div>
-                          <div className="w-6/12 text-right">
-                            NT${subtotal.toLocaleString()}
-                          </div>
-                        </div>
-                      );
-                    })}
+                        return (
+                          <CheckProductItem
+                            key={`${cartItem.productId}-${
+                              cartItem.size || []
+                            }-${cartItem.color || []}-${cartItem.goods || []}`}
+                            product={{ ...product, imagePath: productImage }} // 使用第一張圖片的路徑
+                            cartItem={cartItem}
+                          />
+                        );
+                      })
+                    ) : (
+                      <div className="flex flex-grow justify-center items-center py-10">
+                        您的訂單是空的。
+                      </div>
+                    )}
                   </div>
                   <div className="text-right px-5 text-lg font-bold mt-4">
                     <span className="border-b-2 border-black">

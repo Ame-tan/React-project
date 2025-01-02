@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { setAuthToken } from "./utils";
-import AuthContext from "./contexts";
-import { auth } from "./firebase";
+
+import AuthContext from "./AuthContext";
+
 import { setCartItems } from "./cartSlice";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import TopAll from "./TopAll";
 import EndPage from "./EndPage";
 
@@ -30,33 +30,22 @@ function Login() {
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
   const dispatch = useDispatch();
+  const auth = getAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
     try {
-      // 使用 Firebase 提供的登入方法
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
-
-      // 登入成功，獲取用戶資料
-      const user = userCredential.user;
-
-      // 獲取 token
-      const token = await user.getIdToken();
-
-      // 保存 token
-      setAuthToken(token);
+      const user = userCredential.user; // 獲取登入後的用戶資料
 
       // 用戶資料
-      setUser({
-        id: user.uid,
-        email: user.email,
-      });
+      setUser(user);
 
       // 將用戶資料存入 localStorage
       localStorage.setItem(
@@ -72,15 +61,10 @@ function Login() {
       dispatch(setCartItems(cartItems)); // 更新 Redux 購物車狀態
       navigate("/");
     } catch (error) {
-      console.error(error.code, error.message); // 確認真正的錯誤代碼
-      if (error.code === "auth/user-not-found") {
-        setErrorMessage("使用者不存在");
-      } else if (error.code === "auth/wrong-password") {
-        setErrorMessage("密碼錯誤");
-      } else {
-        setErrorMessage("登入失敗，請檢查您的資訊");
+      {
+        console.error("登入失敗:", error.message);
+        setErrorMessage("登入失敗，信箱或密碼錯誤");
       }
-      
     }
   };
 

@@ -1,5 +1,5 @@
 import React,{useContext} from "react";
-import AuthContext from "./contexts";
+import AuthContext from "./AuthContext";
 import { Link } from "react-router-dom";
 
 function AddToCartAlert({ message, onClose }) {

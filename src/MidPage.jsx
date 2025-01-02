@@ -3,7 +3,7 @@ import $ from "jquery";
 import ImageCarousel from "./ImageCarousel";
 import AddToCartAlert from "./AddToCartAlert";
 import ProductItem from "./ProductItem";
-import AuthContext from "./contexts";
+import AuthContext from "./AuthContext";
 
 function MidPage() {
   const [data, setData] = useState([]);

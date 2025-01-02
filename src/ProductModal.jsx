@@ -143,7 +143,7 @@ const ProductModal = ({ product, images, onClose }) => {
           &times;
         </button>
         <div className="lg:flex max-w-screen-md max-h-screen-md justify-center items-center">
-          <div className="container max-w-96 h-full justify-center items-center">
+          <div className="relative  mx-auto max-w-80  h-full justify-center items-center">
             {images[nowImage] && (
               <img
                 className="container   object-cover"
@@ -165,12 +165,12 @@ const ProductModal = ({ product, images, onClose }) => {
               ))}
             </div>
           </div>
-          <div className="relative mx-auto   lg:pl-8 h-full ">
-            <h1 className="text-2xl font-bold lg:pt-0 pt-3 lg:px-0 px-4">{product.description}</h1>
-            <p className="text-xl mt-4 lg:px-0 px-4">NT${product.money.toLocaleString()}</p>
+          <div className="relative mx-auto max-w-80  lg:pl-3 h-full">
+            <h1 className="text-2xl font-bold lg:pt-0 pt-3 ">{product.description}</h1>
+            <p className="text-xl mt-4 ">NT${product.money.toLocaleString()}</p>
 
             {product.category !== "飾品" && (
-              <div className="relative w-full lg:mt-10 mt-4 lg:px-0 px-4">
+              <div className="relative w-full lg:mt-10 mt-4 ">
                 <div
                   className="cursor-pointer w-full text-xl text-gray-800 p-2 bg-white border border-gray-300 
                   rounded-md flex justify-between items-center "
@@ -198,7 +198,7 @@ const ProductModal = ({ product, images, onClose }) => {
 
             {/* 顏色選擇區 */}
             {product.id === "12" && (
-              <div className="relative w-full lg:px-0 px-4 mt-4">
+              <div className="relative w-full  mt-4">
                 <div
                   className="cursor-pointer w-full text-xl text-gray-800 p-2 bg-white border border-gray-300 rounded-md flex justify-between items-center"
                   onClick={() => setOpenColor(!openColor)}
@@ -224,7 +224,7 @@ const ProductModal = ({ product, images, onClose }) => {
             )}
 
             {/* 現購與預購選擇區 */}
-            <div className="flex lg:mt-10 mt-4 space-x-4 lg:px-0 px-4">
+            <div className="flex mt-10 space-x-4">
               {product.goods.map((goodsOption, index) => (
                 <button
                   key={index}
@@ -240,7 +240,7 @@ const ProductModal = ({ product, images, onClose }) => {
               ))}
             </div>
 
-            <div className="flex lg:mt-10 mt-4 lg:px-0 px-4 space-x-4 items-center justify-between ">
+            <div className="flex lg:mt-10 mt-4  space-x-4 items-center justify-between ">
               <button
                 onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
                 className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l w-12"
@@ -263,7 +263,7 @@ const ProductModal = ({ product, images, onClose }) => {
               </button>
             </div>
 
-            <div className="flex lg:px-0 px-4 items-center  ">
+            <div className="flex  items-center  ">
             <button
               onClick={handleAddToCartAlert}
               disabled={product.category === "飾品"

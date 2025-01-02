@@ -43,7 +43,7 @@ function MyAccount() {
                   <PersonalInformation />
                 </div>
               ) : (
-                <div className="w-full max-w-full  rounded-lg ">
+                <div className="flex w-full max-w-full  rounded-lg ">
                   <OrderManagement />
                 </div>
               )}

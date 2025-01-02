@@ -4,7 +4,7 @@ import useSWR from "swr";
 import axios from "axios";
 import AddToCartAlert from "./AddToCartAlert";
 import ProductItem from "./ProductItem";
-import AuthContext from "./contexts";
+import AuthContext from "./AuthContext";
 import EndPage from "./EndPage"
 
 
