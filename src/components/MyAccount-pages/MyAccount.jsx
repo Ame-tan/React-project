@@ -28,9 +28,9 @@ function MyAccount() {
                 <button
                   key={index}
                   onClick={() => handleTabClick(index)}
-                  className={`text-xl ${
+                  className={`text-xl px-5 ${
                     activeTab === index
-                      ? "font-bold  text-red-400  shadow-lg  px-5  py-2  hover:opacity-75"
+                      ? "font-bold  text-red-400  shadow-lg    py-2  hover:opacity-75"
                       : "text-gray-600  font-bold  hover:opacity-75"
                   }`}
                 >

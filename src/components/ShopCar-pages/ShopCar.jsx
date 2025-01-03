@@ -17,6 +17,7 @@ import { getFirstPhoto } from "./getFirstPhoto"; // 獲取第一張圖片
 import EndPage from "../../layouts/Footer";
 import { handleUpdateQuantityWithPrice } from "../Common-components/AddPriceToCart";
 import { submitOrder } from "../../store/orderSlice";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 {
   /*currentStep 第一步驟的(購物車)*/
@@ -146,6 +147,18 @@ const CheckProductItem = ({ product, cartItem }) => {
 };
 
 function ShopCar() {
+  // 登入狀態
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const [currentStep, setCurrentStep] = useState(1);
   const [products, setProducts] = useState([]);
   const [firstImages, setFirstImages] = useState({}); // 新增 state 來儲存每個商品的第一張圖片
@@ -265,14 +278,19 @@ function ShopCar() {
           <div className="flex container flex-col w-full space-y-10">
             {currentStep === 1 && (
               <>
-                <div className="shopcar-loginmember-container">
-                  <h1 className="shopcar-loginmember-text">
-                    已經是會員？登入後可以更方便管理訂單！
-                    <Link to="/Register" className="shopcar-loginmember-button">
-                      加入會員
-                    </Link>
-                  </h1>
-                </div>
+                {!isLoggedIn && (
+                  <div className="shopcar-loginmember-container">
+                    <h1 className="shopcar-loginmember-text">
+                      已經是會員？登入後可以更方便管理訂單！
+                      <Link
+                        to="/Register"
+                        className="shopcar-loginmember-button"
+                      >
+                        加入會員
+                      </Link>
+                    </h1>
+                  </div>
+                )}
 
                 <div className="shopcar-content-container">
                   <div className="shopcar-title-container">

@@ -278,13 +278,13 @@ function PersonalInformation() {
 
   return (
     <>
-      <div className="personal-info  flex  flex-col  justify-center  h-20  p-4  max-w-60">
-        <h1 className="flex  text-lg  items-center  space-x-16  w-auto">
+      <div className="personal-info  flex  flex-col  justify-center  h-20  p-4  max-w-max">
+        <h1 className="flex  text-lg  items-center w-full">
           {`你好${user?.email}`}
           <Link
             to="/"
             onClick={handleLogout}
-            className="text-red-500  hover:underline  w-full  cursor-pointer  text-lg  ml-6"
+            className="text-red-500  hover:underline  w-full  cursor-pointer text-end text-lg"
           >
             登出
           </Link>

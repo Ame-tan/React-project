@@ -53,7 +53,7 @@ const OrderManagement = () => {
       </div>
 
       <div className="content-wrapper container">
-        <div className="flex justify-between px-5 w-full py-2 bg-white items-center text-lg">
+        <div className="flex justify-between w-full py-2 bg-white items-center text-lg">
           {orders.length > 0 ? (
             <div className="flex flex-wrap w-full py-2 items-center">
               {orders.map((order) => (
