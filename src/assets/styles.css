@@ -132,7 +132,7 @@ body {
     @apply lg:flex  lg:w-20  lg:mr-9  pb-2;
   }
   .account-orders-container {
-    @apply flex   flex-wrap h-full max-w-[100%] justify-between px-4    py-4 bg-white items-center text-lg;
+    @apply flex   flex-wrap h-full max-w-[100%] justify-between px-4 w-full    py-4 bg-white items-center text-lg;
   }
   .account-orders-title {
     @apply flex  w-full py-3 px-20 bg-gray-100 font-bold items-center text-lg border-b;

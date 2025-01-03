@@ -45,7 +45,7 @@ const OrderManagement = () => {
   }
 
   return (
-    <div className="order-management account-orders-container ">
+    <div className="order-management account-orders-container">
       <div className="account-orders-title">
         <p className="flex justify-start w-full">訂單編號</p>
         <p className="flex justify-start pl-20 w-full">日期</p>

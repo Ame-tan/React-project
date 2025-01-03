@@ -41,11 +41,11 @@ function MyAccount() {
 
             <div className="tab-content  account-container  container  w-full  flex ">
               {activeTab === 0 ? (
-                <div className=" w-full max-w-full p-4  rounded-lg ">
+                <div className="w-full max-w-full p-4  rounded-lg ">
                   <PersonalInformation />
                 </div>
               ) : (
-                <div className="flex w-full max-w-full  rounded-lg ">
+                <div className="flex w-full max-w-full text-center  rounded-lg ">
                   <OrderManagement />
                 </div>
               )}
