@@ -1,9 +1,6 @@
-const admin = require("firebase-admin");
-const fetch = require("node-fetch"); // 用於獲取 JSON 檔案的模組
-
-// Firebase 服務賬戶金鑰
-const serviceAccount = require("./myapp-f31f4-firebase-adminsdk-79jpz-81986671cc.json");
-console.log("serviceAccount", serviceAccount);
+import admin from "firebase-admin";
+import fetch from "node-fetch";
+import serviceAccount from "./myapp-f31f4-firebase-adminsdk-79jpz-81986671cc.json" assert { type: "json" }; // 用於導入 JSON 文件
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
