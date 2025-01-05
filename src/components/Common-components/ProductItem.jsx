@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { handleAddToCartWithPrice } from "./AddPriceToCart";
@@ -28,6 +28,20 @@ function ProductItem({ product, image }) {
     );
     handleCloseModal();
   };
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const handleResize = () => {
+      if (!mediaQuery.matches && showModal) {
+        // 當尺寸小於 768px 且目前為開啟狀態時，關閉 modal
+        setShowModal(false);
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleResize);
+
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, [showModal]);
 
   return (
     <div className="bg-white  cursor-pointer  relative  w-full  h-full  md:max-h-full  md:min-w-32 md:mx-auto lg:max-h-max  lg:max-w-60">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import AddToCartAlert from "./AddToCartAlert";
@@ -139,8 +139,8 @@ const ProductModal = ({ product, images, onClose }) => {
         >
           &times;
         </button>
-        <div className="lg:flex max-w-screen-md max-h-screen-md justify-center items-center">
-          <div className="relative  mx-auto max-w-80  h-full justify-center items-center">
+        <div className="lg:flex max-w-screen-md h-full justify-start items-start">
+          <div className="relative  mx-auto max-w-80  h-full">
             {images[nowImage] && (
               <img
                 className="container   object-cover"
