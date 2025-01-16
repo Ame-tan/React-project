@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TopAll from "../../layouts/Header";
 import { Link, useNavigate } from "react-router-dom";
 import { XIcon } from "@heroicons/react/solid";
